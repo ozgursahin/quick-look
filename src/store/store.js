@@ -2,8 +2,23 @@ import { configureStore } from '@reduxjs/toolkit';
 import createSagaMiddleware from 'redux-saga';
 import tasksReducer from './slices/tasksSlice';
 import rootSaga from './sagas/rootSaga';
+import { sessionStorageMiddleware, sessionStorageSyncMiddleware } from './middleware/sessionStorageMiddleware';
+import { AppStateStorage } from '../utils/sessionStorage';
 
+// Create saga middleware
 const sagaMiddleware = createSagaMiddleware();
+
+// Load persisted state from session storage
+const loadPersistedState = () => {
+  const savedState = AppStateStorage.loadAppState();
+  if (savedState) {
+    return {
+      tasks: savedState.tasks,
+      // Add other slices here as the app grows
+    };
+  }
+  return undefined;
+};
 
 const store = configureStore({
   reducer: {
@@ -15,7 +30,11 @@ const store = configureStore({
       serializableCheck: {
         ignoredActions: ['persist/PERSIST', 'persist/REHYDRATE'],
       },
-    }).concat(sagaMiddleware),
+    })
+      .concat(sagaMiddleware)
+      .concat(sessionStorageMiddleware)
+      .concat(sessionStorageSyncMiddleware),
+  preloadedState: loadPersistedState(),
 });
 
 sagaMiddleware.run(rootSaga);

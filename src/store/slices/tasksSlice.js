@@ -1,33 +1,27 @@
 import { createSlice } from '@reduxjs/toolkit';
+import { TaskStorage } from '../../utils/sessionStorage';
+import { sampleTasks, initializeSampleData } from '../../utils/sampleData';
 
-const initialState = {
-  tasks: [
-    {
-      id: '1',
-      name: 'Clean the house',
-      status: 'waiting',
-      dueDate: '2025-08-28',
-    },
-    {
-      id: '2',
-      name: 'Clean the house',
-      status: 'completed',
-      dueDate: '2025-08-29',
-    },
-    {
-      id: '3',
-      name: 'Clean the house',
-      status: 'cancelled',
-      dueDate: '2025-08-30',
-    },
-  ],
-  loading: false,
-  error: null,
-  showCreatePanel: false,
-  showCancelled: false,
-  showCompleted: false,
-  sortBy: 'dueDate',
+// Load initial state from session storage
+const loadInitialState = () => {
+  // Initialize sample data if session storage is empty
+  initializeSampleData();
+  
+  const savedTasks = TaskStorage.loadTasks();
+  const savedUIState = TaskStorage.loadTasksUIState();
+  
+  return {
+    tasks: savedTasks.length > 0 ? savedTasks : sampleTasks,
+    loading: false,
+    error: null,
+    showCreatePanel: false, // Always start with panel closed
+    showCancelled: savedUIState.showCancelled,
+    showCompleted: savedUIState.showCompleted,
+    sortBy: savedUIState.sortBy,
+  };
 };
+
+const initialState = loadInitialState();
 
 const tasksSlice = createSlice({
   name: 'tasks',
@@ -39,12 +33,20 @@ const tasksSlice = createSlice({
     },
     createTaskSuccess: (state, action) => {
       state.loading = false;
-      state.tasks.push({
+      const newTask = {
         id: Date.now().toString(),
-        ...action.payload,
+        name: action.payload.name,
+        description: action.payload.description || '',
+        dueDate: action.payload.dueDate,
         status: 'waiting',
-      });
+        createdAt: new Date().toISOString(),
+        updatedAt: new Date().toISOString(),
+      };
+      state.tasks.push(newTask);
       state.showCreatePanel = false;
+      
+      // Save to session storage
+      TaskStorage.saveTasks(state.tasks);
     },
     createTaskFailure: (state, action) => {
       state.loading = false;
@@ -58,8 +60,15 @@ const tasksSlice = createSlice({
       state.loading = false;
       const index = state.tasks.findIndex(task => task.id === action.payload.id);
       if (index !== -1) {
-        state.tasks[index] = { ...state.tasks[index], ...action.payload };
+        state.tasks[index] = { 
+          ...state.tasks[index], 
+          ...action.payload,
+          updatedAt: new Date().toISOString(),
+        };
       }
+      
+      // Save to session storage
+      TaskStorage.saveTasks(state.tasks);
     },
     updateTaskFailure: (state, action) => {
       state.loading = false;
@@ -72,6 +81,9 @@ const tasksSlice = createSlice({
     deleteTaskSuccess: (state, action) => {
       state.loading = false;
       state.tasks = state.tasks.filter(task => task.id !== action.payload);
+      
+      // Save to session storage
+      TaskStorage.saveTasks(state.tasks);
     },
     deleteTaskFailure: (state, action) => {
       state.loading = false;
@@ -87,12 +99,63 @@ const tasksSlice = createSlice({
     },
     toggleShowCancelled: (state) => {
       state.showCancelled = !state.showCancelled;
+      
+      // Save UI state to session storage
+      TaskStorage.saveTasksUIState({
+        showCancelled: state.showCancelled,
+        showCompleted: state.showCompleted,
+        sortBy: state.sortBy,
+      });
     },
     toggleShowCompleted: (state) => {
       state.showCompleted = !state.showCompleted;
+      
+      // Save UI state to session storage
+      TaskStorage.saveTasksUIState({
+        showCancelled: state.showCancelled,
+        showCompleted: state.showCompleted,
+        sortBy: state.sortBy,
+      });
     },
     setSortBy: (state, action) => {
       state.sortBy = action.payload;
+      
+      // Save UI state to session storage
+      TaskStorage.saveTasksUIState({
+        showCancelled: state.showCancelled,
+        showCompleted: state.showCompleted,
+        sortBy: state.sortBy,
+      });
+    },
+    
+    // Data management actions for session storage
+    clearAllTasks: (state) => {
+      state.tasks = [];
+      state.showCreatePanel = false;
+      
+      // Clear session storage
+      TaskStorage.clearTasks();
+    },
+    
+    resetUIState: (state) => {
+      state.showCancelled = false;
+      state.showCompleted = false;
+      state.sortBy = 'dueDate';
+      state.showCreatePanel = false;
+      
+      // Reset UI state in session storage
+      TaskStorage.saveTasksUIState({
+        showCancelled: false,
+        showCompleted: false,
+        sortBy: 'dueDate',
+      });
+    },
+
+    loadTasksFromStorage: (state, action) => {
+      state.tasks = action.payload || [];
+      
+      // Save to session storage
+      TaskStorage.saveTasks(state.tasks);
     },
   },
 });
@@ -112,6 +175,9 @@ export const {
   toggleShowCancelled,
   toggleShowCompleted,
   setSortBy,
+  clearAllTasks,
+  resetUIState,
+  loadTasksFromStorage,
 } = tasksSlice.actions;
 
 export default tasksSlice.reducer;

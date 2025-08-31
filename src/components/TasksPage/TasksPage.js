@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import TaskList from '../TaskList/TaskList';
 import TaskCreatePanel from '../TaskCreatePanel/TaskCreatePanel';
 import NavigationTabs from '../NavigationTabs/NavigationTabs';
+import SessionStorageDebug from '../SessionStorageDebug/SessionStorageDebug';
 import {
   toggleCreatePanel,
   toggleShowCancelled,
@@ -35,6 +36,9 @@ const TasksPage = () => {
 
   return (
     <div className="tasks-page">
+      {/* Session Storage Debug Panel (development only) */}
+      <SessionStorageDebug />
+      
       {/* Cloud decorations */}
       <div className="cloud cloud-1"></div>
       <div className="cloud cloud-2"></div>
@@ -54,13 +58,13 @@ const TasksPage = () => {
               className={`btn btn-filter ${showCancelled ? 'active' : ''}`}
               onClick={handleToggleCancelled}
             >
-              Hide Cancelled
+              Show Cancelled
             </button>
             <button 
               className={`btn btn-filter ${showCompleted ? 'active' : ''}`}
               onClick={handleToggleCompleted}
             >
-              Hide Completed
+              Show Completed
             </button>
             <div className="sort-control">
               <span>Sort by:</span>

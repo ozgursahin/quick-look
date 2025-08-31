@@ -58,7 +58,10 @@ const TaskItem = ({ task, onStatusChange }) => {
       </div>
       
       <div className="task-content">
-        <span className="task-name">{task.name}</span>
+        <div className="task-name">{task.name}</div>
+        {task.description && (
+          <div className="task-description">{task.description}</div>
+        )}
       </div>
       
       <div className="task-due-date">
