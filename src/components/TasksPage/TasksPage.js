@@ -5,6 +5,7 @@ import TaskList from '../TaskList/TaskList';
 import TaskCreatePanel from '../TaskCreatePanel/TaskCreatePanel';
 import NavigationTabs from '../NavigationTabs/NavigationTabs';
 import SessionStorageDebug from '../SessionStorageDebug/SessionStorageDebug';
+import DateTimePanel from '../DateTimePanel/DateTimePanel';
 import {
   toggleCreatePanel,
   toggleTasksPanel,
@@ -100,7 +101,7 @@ const TasksPage = () => {
                 onClick={handleClosePanel}
                 title="Close Tasks Panel"
               >
-                <IoClose size={16} />
+                <IoClose size={22} />
               </button>
             </div>
           </div>
@@ -118,6 +119,9 @@ const TasksPage = () => {
         showTasksPanel={showTasksPanel}
         onToggleTasksPanel={handleClosePanel}
       />
+      
+      {/* Date Time Panel - Always Visible */}
+      <DateTimePanel />
     </div>
   );
 };
