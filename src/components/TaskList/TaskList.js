@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import TaskItem from '../TaskItem/TaskItem';
-import { updateTaskRequest } from '../../store/slices/tasksSlice';
+import { updateTaskRequest, deleteTaskRequest } from '../../store/slices/tasksSlice';
 import './TaskList.css';
 
 const TaskList = () => {
@@ -12,6 +12,10 @@ const TaskList = () => {
 
   const handleTaskStatusChange = (taskId, newStatus) => {
     dispatch(updateTaskRequest({ id: taskId, status: newStatus }));
+  };
+
+  const handleTaskDelete = (taskId) => {
+    dispatch(deleteTaskRequest(taskId));
   };
 
   // Filter tasks based on visibility settings
@@ -54,6 +58,7 @@ const TaskList = () => {
           key={task.id} 
           task={task} 
           onStatusChange={handleTaskStatusChange}
+          onDelete={handleTaskDelete}
         />
       ))}
     </div>

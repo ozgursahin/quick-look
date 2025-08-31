@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
+import { IoClose, IoCheckmark } from 'react-icons/io5';
 import { createTaskRequest, closeCreatePanel } from '../../store/slices/tasksSlice';
 import { SessionStorage } from '../../utils/sessionStorage';
 import './TaskCreatePanel.css';
@@ -113,6 +114,7 @@ const TaskCreatePanel = () => {
             className="btn btn-cancel"
             onClick={handleCancel}
           >
+            <IoClose size={16} />
             Cancel
           </button>
           <button 
@@ -120,6 +122,7 @@ const TaskCreatePanel = () => {
             className="btn btn-create"
             disabled={!taskName.trim() || !dueDate}
           >
+            <IoCheckmark size={16} />
             Create Task
           </button>
         </div>

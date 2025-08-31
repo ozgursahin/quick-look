@@ -15,6 +15,7 @@ const loadInitialState = () => {
     loading: false,
     error: null,
     showCreatePanel: false, // Always start with panel closed
+    showTasksPanel: true, // Panel is visible by default
     showCancelled: savedUIState.showCancelled,
     showCompleted: savedUIState.showCompleted,
     sortBy: savedUIState.sortBy,
@@ -97,6 +98,12 @@ const tasksSlice = createSlice({
     closeCreatePanel: (state) => {
       state.showCreatePanel = false;
     },
+    toggleTasksPanel: (state) => {
+      state.showTasksPanel = !state.showTasksPanel;
+    },
+    closeTasksPanel: (state) => {
+      state.showTasksPanel = false;
+    },
     toggleShowCancelled: (state) => {
       state.showCancelled = !state.showCancelled;
       
@@ -142,6 +149,7 @@ const tasksSlice = createSlice({
       state.showCompleted = false;
       state.sortBy = 'dueDate';
       state.showCreatePanel = false;
+      state.showTasksPanel = true;
       
       // Reset UI state in session storage
       TaskStorage.saveTasksUIState({
@@ -172,6 +180,8 @@ export const {
   deleteTaskFailure,
   toggleCreatePanel,
   closeCreatePanel,
+  toggleTasksPanel,
+  closeTasksPanel,
   toggleShowCancelled,
   toggleShowCompleted,
   setSortBy,

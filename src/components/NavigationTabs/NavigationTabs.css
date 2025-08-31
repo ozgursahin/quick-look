@@ -27,6 +27,10 @@
   cursor: pointer;
   transition: all 0.2s ease;
   position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
 }
 
 .tab:hover {
@@ -56,5 +60,6 @@
   .tab {
     padding: 12px 16px;
     font-size: 14px;
+    gap: 6px;
   }
 }

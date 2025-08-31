@@ -1,7 +1,9 @@
 import React from 'react';
+import { FaTrash } from 'react-icons/fa';
+import { IoTime, IoCheckmarkCircle, IoBanOutline } from 'react-icons/io5';
 import './TaskItem.css';
 
-const TaskItem = ({ task, onStatusChange }) => {
+const TaskItem = ({ task, onStatusChange, onDelete }) => {
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
@@ -37,6 +39,19 @@ const TaskItem = ({ task, onStatusChange }) => {
     }
   };
 
+  const getStatusIcon = (status) => {
+    switch (status) {
+      case 'waiting':
+        return <IoTime size={14} />;
+      case 'completed':
+        return <IoCheckmarkCircle size={14} />;
+      case 'cancelled':
+        return <IoBanOutline size={14} />;
+      default:
+        return null;
+    }
+  };
+
   const handleStatusClick = () => {
     const statusCycle = {
       waiting: 'completed',
@@ -44,6 +59,12 @@ const TaskItem = ({ task, onStatusChange }) => {
       cancelled: 'waiting'
     };
     onStatusChange(task.id, statusCycle[task.status]);
+  };
+
+  const handleDelete = () => {
+    if (window.confirm(`Are you sure you want to delete the task "${task.name}"?`)) {
+      onDelete(task.id);
+    }
   };
 
   return (
@@ -54,6 +75,7 @@ const TaskItem = ({ task, onStatusChange }) => {
         onClick={handleStatusClick}
         title={`Click to change status from ${getStatusText(task.status)}`}
       >
+        {getStatusIcon(task.status)}
         {getStatusText(task.status)}
       </div>
       
@@ -67,6 +89,14 @@ const TaskItem = ({ task, onStatusChange }) => {
       <div className="task-due-date">
         <span>Due Date: {formatDate(task.dueDate)}</span>
       </div>
+      
+      <button 
+        className="delete-btn"
+        onClick={handleDelete}
+        title="Delete task"
+      >
+        <FaTrash size={14} />
+      </button>
     </div>
   );
 };
