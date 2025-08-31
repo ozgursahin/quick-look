@@ -1,6 +1,6 @@
 .task-create-panel {
-  background: #f8f9fa;
-  border-bottom: 1px solid #e9ecef;
+  background: rgba(26, 26, 46, 0.7);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
   padding: 20px 30px;
   animation: slideDown 0.3s ease-out;
 }
@@ -33,21 +33,23 @@
 .form-input {
   width: 100%;
   padding: 12px 16px;
-  border: 1px solid #ddd;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 6px;
   font-size: 14px;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
-  background: white;
+  background: rgba(255, 255, 255, 0.1);
+  color: #e0e0e0;
 }
 
 .form-textarea {
   width: 100%;
   padding: 12px 16px;
-  border: 1px solid #ddd;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 6px;
   font-size: 14px;
   transition: border-color 0.2s ease, box-shadow 0.2s ease;
-  background: white;
+  background: rgba(255, 255, 255, 0.1);
+  color: #e0e0e0;
   resize: vertical;
   min-height: 100px;
   font-family: inherit;
@@ -57,17 +59,17 @@
 .form-input:focus,
 .form-textarea:focus {
   outline: none;
-  border-color: #4CAF50;
-  box-shadow: 0 0 0 2px rgba(76, 175, 80, 0.1);
+  border-color: #6366f1;
+  box-shadow: 0 0 0 2px rgba(99, 102, 241, 0.2);
 }
 
 .form-input::placeholder,
 .form-textarea::placeholder {
-  color: #999;
+  color: #a0a0b8;
 }
 
 .date-picker {
-  color: #666;
+  color: #e0e0e0;
 }
 
 .date-picker::-webkit-calendar-picker-indicator {
@@ -102,25 +104,26 @@
 }
 
 .btn-cancel {
-  background: #f5f5f5;
-  color: #666;
-  border: 1px solid #ddd;
+  background: rgba(255, 255, 255, 0.1);
+  color: #a0a0b8;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .btn-cancel:hover {
-  background: #e9ecef;
+  background: rgba(255, 255, 255, 0.15);
+  color: #d1d1e0;
 }
 
 .btn-create {
-  background: #4CAF50;
+  background: #6366f1;
   color: white;
   min-width: 120px;
 }
 
 .btn-create:hover:not(:disabled) {
-  background: #45a049;
+  background: #5855eb;
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(76, 175, 80, 0.3);
+  box-shadow: 0 4px 12px rgba(99, 102, 241, 0.3);
 }
 
 .btn-create:disabled {

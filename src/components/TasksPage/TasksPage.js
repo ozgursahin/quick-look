@@ -45,9 +45,16 @@ const TasksPage = () => {
       {/* Session Storage Debug Panel (development only) */}
       <SessionStorageDebug />
       
-      {/* Cloud decorations */}
+      {/* Sky decorations */}
       <div className="cloud cloud-1"></div>
       <div className="cloud cloud-2"></div>
+      <div className="moon"></div>
+      <div className="star star-1"></div>
+      <div className="star star-2"></div>
+      <div className="star star-3"></div>
+      <div className="star star-4"></div>
+      <div className="star star-5"></div>
+      <div className="star star-6"></div>
       
       {/* Task panel */}
       {showTasksPanel && (
@@ -93,7 +100,7 @@ const TasksPage = () => {
                 onClick={handleClosePanel}
                 title="Close Tasks Panel"
               >
-                <IoClose size={18} />
+                <IoClose size={16} />
               </button>
             </div>
           </div>

@@ -3,9 +3,9 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(26, 26, 46, 0.95);
   backdrop-filter: blur(10px);
-  border-top: 1px solid rgba(0, 0, 0, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
   padding: 0;
   z-index: 1000;
 }
@@ -21,7 +21,7 @@
   padding: 15px 20px;
   border: none;
   background: transparent;
-  color: #666;
+  color: #a0a0b8;
   font-size: 16px;
   font-weight: 500;
   cursor: pointer;
@@ -34,13 +34,13 @@
 }
 
 .tab:hover {
-  color: #333;
-  background: rgba(0, 0, 0, 0.05);
+  color: #d1d1e0;
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .tab.active {
-  color: #4CAF50;
-  background: rgba(76, 175, 80, 0.1);
+  color: #6366f1;
+  background: rgba(99, 102, 241, 0.1);
 }
 
 .tab.active::after {
@@ -51,7 +51,7 @@
   transform: translateX(-50%);
   width: 60%;
   height: 3px;
-  background: #4CAF50;
+  background: #6366f1;
   border-radius: 3px 3px 0 0;
 }
 

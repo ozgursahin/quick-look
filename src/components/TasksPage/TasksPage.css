@@ -2,23 +2,23 @@
   min-height: 100vh;
   position: relative;
   padding: 40px 20px;
-  background: linear-gradient(135deg, #8BC34A 0%, #689F38 50%, #558B2F 100%);
+  background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
   overflow: hidden;
 }
 
-/* Cloud decorations */
+/* Sky decorations */
 .cloud {
   position: absolute;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.15);
   border-radius: 50px;
-  opacity: 0.6;
+  opacity: 0.8;
 }
 
 .cloud:before,
 .cloud:after {
   content: '';
   position: absolute;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.15);
   border-radius: 50px;
 }
 
@@ -48,7 +48,7 @@
   width: 80px;
   height: 30px;
   top: 120px;
-  right: 150px;
+  right: 200px;
   animation: float 8s ease-in-out infinite;
   animation-delay: 2s;
 }
@@ -76,17 +76,107 @@
   }
 }
 
+/* Moon decoration */
+.moon {
+  position: absolute;
+  top: 80px;
+  right: 120px;
+  width: 60px;
+  height: 60px;
+  background: #f4f4a1;
+  border-radius: 50%;
+  box-shadow: 0 0 20px rgba(244, 244, 161, 0.3);
+  animation: moonGlow 4s ease-in-out infinite alternate;
+}
+
+@keyframes moonGlow {
+  0% {
+    box-shadow: 0 0 20px rgba(244, 244, 161, 0.3);
+  }
+  100% {
+    box-shadow: 0 0 30px rgba(244, 244, 161, 0.5);
+  }
+}
+
+/* Stars decoration */
+.star {
+  position: absolute;
+  background: #f4f4a1;
+  border-radius: 50%;
+  animation: twinkle 3s ease-in-out infinite;
+}
+
+.star-1 {
+  width: 3px;
+  height: 3px;
+  top: 120px;
+  left: 150px;
+  animation-delay: 0s;
+}
+
+.star-2 {
+  width: 2px;
+  height: 2px;
+  top: 180px;
+  left: 250px;
+  animation-delay: 1s;
+}
+
+.star-3 {
+  width: 4px;
+  height: 4px;
+  top: 100px;
+  right: 250px;
+  animation-delay: 2s;
+}
+
+.star-4 {
+  width: 2px;
+  height: 2px;
+  top: 200px;
+  right: 180px;
+  animation-delay: 0.5s;
+}
+
+.star-5 {
+  width: 3px;
+  height: 3px;
+  top: 150px;
+  left: 80px;
+  animation-delay: 1.5s;
+}
+
+.star-6 {
+  width: 2px;
+  height: 2px;
+  top: 90px;
+  left: 300px;
+  animation-delay: 2.5s;
+}
+
+@keyframes twinkle {
+  0%, 100% {
+    opacity: 0.3;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.2);
+  }
+}
+
 /* Task panel */
 .task-panel {
   max-width: 1200px;
   margin: 0 auto;
-  background: rgba(255, 255, 255, 0.95);
+  background: rgba(255, 255, 255, 0.98);
   border-radius: 12px;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 2px 24px #efefc8;
   backdrop-filter: blur(10px);
   min-height: 70vh;
   position: relative;
   margin-bottom: 60px;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .task-header {
@@ -130,12 +220,12 @@
 }
 
 .btn-primary {
-  background: #4CAF50;
+  background: #6366f1;
   color: white;
 }
 
 .btn-primary:hover {
-  background: #45a049;
+  background: #5855eb;
   transform: translateY(-1px);
 }
 
@@ -150,18 +240,15 @@
 }
 
 .btn-filter.active {
-  background: #2196F3;
+  background: #6366f1;
   color: white;
-  border-color: #2196F3;
+  border-color: #6366f1;
 }
 
 .btn-close {
-  background: #f44336;
+  background: #dc2626;
   color: white;
   border: none;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -169,11 +256,13 @@
   font-weight: bold;
   margin-left: 10px;
   gap: 0;
+  box-shadow: 0 2px 8px rgba(220, 38, 38, 0.3);
 }
 
 .btn-close:hover {
-  background: #d32f2f;
+  background: #b91c1c;
   transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
 }
 
 .sort-control {
@@ -195,7 +284,7 @@
 
 .sort-select:focus {
   outline: none;
-  border-color: #4CAF50;
+  border-color: #6366f1;
 }
 
 /* Responsive design */
@@ -215,6 +304,10 @@
   }
   
   .cloud-1, .cloud-2 {
+    display: none;
+  }
+  
+  .moon, .star {
     display: none;
   }
 }
