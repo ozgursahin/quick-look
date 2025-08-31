@@ -1,0 +1,196 @@
+.tasks-page {
+  min-height: 100vh;
+  position: relative;
+  padding: 40px 20px;
+  background: linear-gradient(135deg, #8BC34A 0%, #689F38 50%, #558B2F 100%);
+  overflow: hidden;
+}
+
+/* Cloud decorations */
+.cloud {
+  position: absolute;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 50px;
+  opacity: 0.6;
+}
+
+.cloud:before,
+.cloud:after {
+  content: '';
+  position: absolute;
+  background: rgba(255, 255, 255, 0.8);
+  border-radius: 50px;
+}
+
+.cloud-1 {
+  width: 100px;
+  height: 40px;
+  top: 60px;
+  left: 100px;
+  animation: float 6s ease-in-out infinite;
+}
+
+.cloud-1:before {
+  width: 50px;
+  height: 50px;
+  top: -25px;
+  left: 10px;
+}
+
+.cloud-1:after {
+  width: 60px;
+  height: 35px;
+  top: -15px;
+  right: 15px;
+}
+
+.cloud-2 {
+  width: 80px;
+  height: 30px;
+  top: 120px;
+  right: 150px;
+  animation: float 8s ease-in-out infinite;
+  animation-delay: 2s;
+}
+
+.cloud-2:before {
+  width: 40px;
+  height: 40px;
+  top: -20px;
+  left: 8px;
+}
+
+.cloud-2:after {
+  width: 50px;
+  height: 25px;
+  top: -10px;
+  right: 12px;
+}
+
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+
+/* Task panel */
+.task-panel {
+  max-width: 1200px;
+  margin: 0 auto;
+  background: rgba(255, 255, 255, 0.95);
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(10px);
+  min-height: 70vh;
+  position: relative;
+  margin-bottom: 60px;
+}
+
+.task-header {
+  background: rgba(0, 0, 0, 0.05);
+  padding: 20px 30px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+  border-radius: 12px 12px 0 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 15px;
+}
+
+.task-header h1 {
+  margin: 0;
+  color: #333;
+  font-size: 24px;
+  font-weight: 600;
+}
+
+.task-controls {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.btn {
+  padding: 8px 16px;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  white-space: nowrap;
+}
+
+.btn-primary {
+  background: #4CAF50;
+  color: white;
+}
+
+.btn-primary:hover {
+  background: #45a049;
+  transform: translateY(-1px);
+}
+
+.btn-filter {
+  background: #f5f5f5;
+  color: #666;
+  border: 1px solid #ddd;
+}
+
+.btn-filter:hover {
+  background: #e0e0e0;
+}
+
+.btn-filter.active {
+  background: #2196F3;
+  color: white;
+  border-color: #2196F3;
+}
+
+.sort-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #666;
+}
+
+.sort-select {
+  padding: 6px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  background: white;
+  cursor: pointer;
+}
+
+.sort-select:focus {
+  outline: none;
+  border-color: #4CAF50;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .tasks-page {
+    padding: 20px 10px;
+  }
+  
+  .task-header {
+    padding: 15px 20px;
+    flex-direction: column;
+    align-items: stretch;
+  }
+  
+  .task-controls {
+    justify-content: center;
+  }
+  
+  .cloud-1, .cloud-2 {
+    display: none;
+  }
+}

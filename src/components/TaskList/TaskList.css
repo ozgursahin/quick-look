@@ -1,0 +1,46 @@
+.task-list {
+  padding: 0;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.task-list.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+}
+
+.empty-state {
+  text-align: center;
+  color: #999;
+}
+
+.empty-state p {
+  font-size: 18px;
+  margin: 0 0 8px 0;
+}
+
+.empty-state small {
+  font-size: 14px;
+  color: #ccc;
+}
+
+/* Custom scrollbar */
+.task-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.task-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 4px;
+}
+
+.task-list::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 4px;
+}
+
+.task-list::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
