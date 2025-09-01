@@ -4,6 +4,8 @@ import { IoAdd, IoClose, IoEye, IoEyeOff, IoArchive } from 'react-icons/io5';
 import TaskList from '../TaskList/TaskList';
 import TaskCreatePanel from '../TaskCreatePanel/TaskCreatePanel';
 import NotesPage from '../NotesPage/NotesPage';
+import PomodoroPanel from '../PomodoroPanel/PomodoroPanel';
+import PomodoroStatus from '../PomodoroStatus/PomodoroStatus';
 import NavigationTabs from '../NavigationTabs/NavigationTabs';
 import SessionStorageDebug from '../SessionStorageDebug/SessionStorageDebug';
 import DateTimePanel from '../DateTimePanel/DateTimePanel';
@@ -23,6 +25,7 @@ const TasksPage = () => {
   const { showCreatePanel, showTasksPanel, showCancelled, showCompleted, showArchived, sortBy, editingTask, labelFilter, tasks } = useSelector(
     (state) => state.tasks
   );
+  const { showPomodoroPanel } = useSelector(state => state.pomodoro);
 
   const handleCreateTask = () => {
     dispatch(toggleCreatePanel());
@@ -61,6 +64,9 @@ const TasksPage = () => {
     <div className="tasks-page">
       {/* Session Storage Debug Panel (development only) */}
       <SessionStorageDebug />
+      
+      {/* Pomodoro Status - Always visible when timer is active */}
+      <PomodoroStatus />
       
       {/* Sky decorations */}
       <div className="cloud cloud-1"></div>
@@ -156,6 +162,9 @@ const TasksPage = () => {
 
       {/* Notes Panel */}
       <NotesPage />
+
+      {/* Pomodoro Panel */}
+      {showPomodoroPanel && <PomodoroPanel />}
 
       {/* Navigation Tabs */}
       <NavigationTabs />

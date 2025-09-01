@@ -1,9 +1,16 @@
 import React from 'react';
+import { useSelector, useDispatch } from 'react-redux';
 import { FaTrash, FaEdit } from 'react-icons/fa';
-import { IoTime, IoCheckmarkCircle, IoBanOutline, IoCreate, IoFlag, IoArchive, IoRefresh } from 'react-icons/io5';
+import { IoTime, IoCheckmarkCircle, IoBanOutline, IoCreate, IoFlag, IoArchive, IoRefresh, IoTimer } from 'react-icons/io5';
+import { setActiveTask, openPomodoroPanel } from '../../store/slices/pomodoroSlice';
 import './TaskItem.css';
 
 const TaskItem = ({ task, onStatusChange, onEdit, onDelete, onArchive, onUnarchive }) => {
+  const dispatch = useDispatch();
+  const pomodoro = useSelector(state => state.pomodoro);
+  
+  const isActiveTask = pomodoro.activeTaskId === task.id;
+  const canStartPomodoro = task.status === 'waiting' || task.status === 'in_progress';
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
@@ -90,8 +97,14 @@ const TaskItem = ({ task, onStatusChange, onEdit, onDelete, onArchive, onUnarchi
     }
   };
 
+  const handleStartPomodoro = (e) => {
+    e.stopPropagation();
+    dispatch(setActiveTask(task.id));
+    dispatch(openPomodoroPanel());
+  };
+
   return (
-    <div className={`task-item ${task.archived ? 'archived' : ''}`}>
+    <div className={`task-item ${task.archived ? 'archived' : ''} ${isActiveTask ? 'active-pomodoro' : ''}`}>
       <div 
         className="status-badge" 
         style={{ backgroundColor: getStatusColor(task.status) }}
@@ -106,6 +119,7 @@ const TaskItem = ({ task, onStatusChange, onEdit, onDelete, onArchive, onUnarchi
         <div className="task-name">
           {task.name}
           {task.archived && <span className="archived-badge">Archived</span>}
+          {isActiveTask && <span className="pomodoro-badge">🍅 Active</span>}
         </div>
         {task.description && (
           <div className="task-description">{task.description}</div>
@@ -140,6 +154,15 @@ const TaskItem = ({ task, onStatusChange, onEdit, onDelete, onArchive, onUnarchi
       </div>
       
       <div className="task-actions">
+        {canStartPomodoro && (
+          <button 
+            className={`action-btn pomodoro-btn ${isActiveTask ? 'active' : ''}`}
+            onClick={handleStartPomodoro}
+            title={isActiveTask ? "Already active in Pomodoro" : "Start Pomodoro for this task"}
+          >
+            <IoTimer size={12} />
+          </button>
+        )}
         <button 
           className="action-btn edit-btn"
           onClick={handleEdit}

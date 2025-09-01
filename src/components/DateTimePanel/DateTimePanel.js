@@ -1,9 +1,12 @@
 import React, { useState, useEffect } from 'react';
-import { IoCalendar, IoTime } from 'react-icons/io5';
+import { useSelector } from 'react-redux';
+import { IoCalendar, IoTime, IoTimer } from 'react-icons/io5';
+import { POMODORO_PHASES } from '../../store/slices/pomodoroSlice';
 import './DateTimePanel.css';
 
 const DateTimePanel = () => {
   const [currentTime, setCurrentTime] = useState(new Date());
+  const pomodoro = useSelector(state => state.pomodoro);
 
   useEffect(() => {
     const timer = setInterval(() => {
@@ -31,6 +34,27 @@ const DateTimePanel = () => {
     });
   };
 
+  const formatPomodoroTime = (seconds) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, '0')}`;
+  };
+
+  const getPomodoroEmoji = () => {
+    switch (pomodoro.currentPhase) {
+      case POMODORO_PHASES.WORK:
+        return '🍅';
+      case POMODORO_PHASES.SHORT_BREAK:
+        return '☕';
+      case POMODORO_PHASES.LONG_BREAK:
+        return '🏖️';
+      default:
+        return null;
+    }
+  };
+
+  const showPomodoroStatus = pomodoro.currentPhase !== POMODORO_PHASES.IDLE;
+
   return (
     <div className="datetime-panel">
       <div className="datetime-content">
@@ -44,6 +68,16 @@ const DateTimePanel = () => {
           <span className="date-text">{formatDate(currentTime)}</span>
           <span className="cute-emoji">✨</span>
         </div>
+        {/* Mini Pomodoro Status */}
+        {showPomodoroStatus && (
+          <div className="pomodoro-mini-status">
+            <IoTimer size={14} className="datetime-icon" />
+            <span className="pomodoro-mini-text">
+              {getPomodoroEmoji()} {formatPomodoroTime(pomodoro.timeRemaining)}
+            </span>
+            <span className={`pomodoro-mini-indicator ${pomodoro.isRunning ? 'running' : 'paused'}`} />
+          </div>
+        )}
       </div>
     </div>
   );

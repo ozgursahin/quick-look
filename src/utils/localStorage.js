@@ -8,6 +8,8 @@ const LOCAL_STORAGE_KEYS = {
   TASKS_UI_STATE: 'quick-look-tasks-ui-state',
   NOTES: 'quick-look-notes',
   NOTES_UI_STATE: 'quick-look-notes-ui-state',
+  POMODORO: 'quick-look-pomodoro',
+  POMODORO_UI_STATE: 'quick-look-pomodoro-ui-state',
   USER_PREFERENCES: 'quick-look-user-preferences',
   APP_STATE: 'quick-look-app-state',
 };
@@ -145,6 +147,55 @@ export const NoteStorage = {
 };
 
 /**
+ * Pomodoro-specific local storage operations
+ */
+export const PomodoroStorage = {
+  // Save pomodoro state to local storage
+  savePomodoroState: (pomodoroState) => {
+    const stateToSave = {
+      currentPhase: pomodoroState.currentPhase,
+      timeRemaining: pomodoroState.timeRemaining,
+      currentSession: pomodoroState.currentSession,
+      completedSessions: pomodoroState.completedSessions,
+      workDuration: pomodoroState.workDuration,
+      shortBreakDuration: pomodoroState.shortBreakDuration,
+      longBreakDuration: pomodoroState.longBreakDuration,
+      sessionsUntilLongBreak: pomodoroState.sessionsUntilLongBreak,
+      activeTaskId: pomodoroState.activeTaskId,
+      autoStartBreaks: pomodoroState.autoStartBreaks,
+      autoStartWork: pomodoroState.autoStartWork,
+      soundEnabled: pomodoroState.soundEnabled,
+      todayStats: pomodoroState.todayStats,
+      pomodoroHistory: pomodoroState.pomodoroHistory,
+    };
+    return LocalStorage.setItem(LOCAL_STORAGE_KEYS.POMODORO, stateToSave);
+  },
+
+  // Load pomodoro state from local storage
+  loadPomodoroState: () => {
+    return LocalStorage.getItem(LOCAL_STORAGE_KEYS.POMODORO, {});
+  },
+
+  // Save pomodoro UI state
+  savePomodoroUIState: (uiState) => {
+    return LocalStorage.setItem(LOCAL_STORAGE_KEYS.POMODORO_UI_STATE, uiState);
+  },
+
+  // Load pomodoro UI state
+  loadPomodoroUIState: () => {
+    return LocalStorage.getItem(LOCAL_STORAGE_KEYS.POMODORO_UI_STATE, {
+      showPomodoroPanel: false,
+    });
+  },
+
+  // Clear all pomodoro data
+  clearPomodoro: () => {
+    LocalStorage.removeItem(LOCAL_STORAGE_KEYS.POMODORO);
+    LocalStorage.removeItem(LOCAL_STORAGE_KEYS.POMODORO_UI_STATE);
+  },
+};
+
+/**
  * User preferences local storage operations
  */
 export const UserPreferencesStorage = {
@@ -179,6 +230,7 @@ export const AppStateStorage = {
     const stateToSave = {
       tasks: state.tasks,
       notes: state.notes,
+      pomodoro: state.pomodoro,
       // Add other slices here as the app grows
       lastSaved: new Date().toISOString(),
     };
