@@ -1,9 +1,9 @@
 import React from 'react';
-import { FaTrash } from 'react-icons/fa';
+import { FaTrash, FaEdit } from 'react-icons/fa';
 import { IoTime, IoCheckmarkCircle, IoBanOutline } from 'react-icons/io5';
 import './TaskItem.css';
 
-const TaskItem = ({ task, onStatusChange, onDelete }) => {
+const TaskItem = ({ task, onStatusChange, onEdit, onDelete }) => {
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
@@ -67,6 +67,10 @@ const TaskItem = ({ task, onStatusChange, onDelete }) => {
     }
   };
 
+  const handleEdit = () => {
+    onEdit(task);
+  };
+
   return (
     <div className="task-item">
       <div 
@@ -90,13 +94,22 @@ const TaskItem = ({ task, onStatusChange, onDelete }) => {
         <span>Due Date: {formatDate(task.dueDate)}</span>
       </div>
       
-      <button 
-        className="delete-btn"
-        onClick={handleDelete}
-        title="Delete task"
-      >
-        <FaTrash size={14} />
-      </button>
+      <div className="task-actions">
+        <button 
+          className="action-btn edit-btn"
+          onClick={handleEdit}
+          title="Edit task"
+        >
+          <FaEdit size={12} />
+        </button>
+        <button 
+          className="action-btn delete-btn"
+          onClick={handleDelete}
+          title="Delete task"
+        >
+          <FaTrash size={12} />
+        </button>
+      </div>
     </div>
   );
 };

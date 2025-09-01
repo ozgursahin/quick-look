@@ -15,6 +15,7 @@ const loadInitialState = () => {
     showCancelled: savedUIState.showCancelled,
     showCompleted: savedUIState.showCompleted,
     sortBy: savedUIState.sortBy,
+    editingTask: null, // For tracking which task is being edited
   };
 };
 
@@ -63,6 +64,7 @@ const tasksSlice = createSlice({
           updatedAt: new Date().toISOString(),
         };
       }
+      state.editingTask = null;
       
       // Save to session storage
       TaskStorage.saveTasks(state.tasks);
@@ -90,6 +92,7 @@ const tasksSlice = createSlice({
     // UI actions
     toggleCreatePanel: (state) => {
       state.showCreatePanel = !state.showCreatePanel;
+      state.editingTask = null; // Close any editing when creating new
     },
     closeCreatePanel: (state) => {
       state.showCreatePanel = false;
@@ -99,6 +102,8 @@ const tasksSlice = createSlice({
     },
     closeTasksPanel: (state) => {
       state.showTasksPanel = false;
+      state.showCreatePanel = false;
+      state.editingTask = null;
     },
     toggleShowCancelled: (state) => {
       state.showCancelled = !state.showCancelled;
@@ -131,10 +136,20 @@ const tasksSlice = createSlice({
       });
     },
     
+    // Edit mode actions
+    setEditingTask: (state, action) => {
+      state.editingTask = action.payload;
+      state.showCreatePanel = false; // Close create panel when editing
+    },
+    cancelEditingTask: (state) => {
+      state.editingTask = null;
+    },
+    
     // Data management actions for session storage
     clearAllTasks: (state) => {
       state.tasks = [];
       state.showCreatePanel = false;
+      state.editingTask = null;
       
       // Clear session storage
       TaskStorage.clearTasks();
@@ -146,6 +161,7 @@ const tasksSlice = createSlice({
       state.sortBy = 'dueDate';
       state.showCreatePanel = false;
       state.showTasksPanel = true;
+      state.editingTask = null;
       
       // Reset UI state in session storage
       TaskStorage.saveTasksUIState({
@@ -192,6 +208,8 @@ export const {
   toggleShowCancelled,
   toggleShowCompleted,
   setSortBy,
+  setEditingTask,
+  cancelEditingTask,
   clearAllTasks,
   resetUIState,
   loadTasksFromStorage,

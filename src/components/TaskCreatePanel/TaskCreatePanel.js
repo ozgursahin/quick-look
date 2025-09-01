@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { IoClose, IoCheckmark } from 'react-icons/io5';
-import { createTaskRequest, closeCreatePanel } from '../../store/slices/tasksSlice';
+import { createTaskRequest, updateTaskRequest, closeCreatePanel, cancelEditingTask } from '../../store/slices/tasksSlice';
 import { SessionStorage } from '../../utils/localStorage';
 import './TaskCreatePanel.css';
 
@@ -9,46 +9,62 @@ const DRAFT_KEY = 'quick-look-task-draft';
 
 const TaskCreatePanel = () => {
   const dispatch = useDispatch();
+  const { editingTask } = useSelector(state => state.tasks);
+  const isEditing = !!editingTask;
   
   // Load draft from session storage on component mount
   const [taskName, setTaskName] = useState(() => {
+    if (isEditing) return editingTask.name;
     const draft = SessionStorage.getItem(DRAFT_KEY, {});
     return draft.taskName || '';
   });
   
   const [dueDate, setDueDate] = useState(() => {
+    if (isEditing) return editingTask.dueDate;
     const draft = SessionStorage.getItem(DRAFT_KEY, {});
     return draft.dueDate || '';
   });
   
   const [description, setDescription] = useState(() => {
+    if (isEditing) return editingTask.description || '';
     const draft = SessionStorage.getItem(DRAFT_KEY, {});
     return draft.description || '';
   });
 
-  // Save draft to session storage whenever form data changes
+  // Save draft to session storage whenever form data changes (only when creating)
   useEffect(() => {
-    const draft = {
-      taskName: taskName.trim(),
-      dueDate,
-      description: description.trim(),
-      lastModified: new Date().toISOString(),
-    };
-    
-    // Only save if there's actual content
-    if (taskName.trim() || dueDate || description.trim()) {
-      SessionStorage.setItem(DRAFT_KEY, draft);
+    if (!isEditing) {
+      const draft = {
+        taskName: taskName.trim(),
+        dueDate,
+        description: description.trim(),
+        lastModified: new Date().toISOString(),
+      };
+      
+      // Only save if there's actual content
+      if (taskName.trim() || dueDate || description.trim()) {
+        SessionStorage.setItem(DRAFT_KEY, draft);
+      }
     }
-  }, [taskName, dueDate, description]);
+  }, [taskName, dueDate, description, isEditing]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (taskName.trim() && dueDate) {
-      dispatch(createTaskRequest({
-        name: taskName.trim(),
-        dueDate: dueDate,
-        description: description.trim(),
-      }));
+      if (isEditing) {
+        dispatch(updateTaskRequest({
+          id: editingTask.id,
+          name: taskName.trim(),
+          dueDate: dueDate,
+          description: description.trim(),
+        }));
+      } else {
+        dispatch(createTaskRequest({
+          name: taskName.trim(),
+          dueDate: dueDate,
+          description: description.trim(),
+        }));
+      }
       
       // Clear draft and form
       clearDraft();
@@ -56,15 +72,21 @@ const TaskCreatePanel = () => {
   };
 
   const handleCancel = () => {
-    dispatch(closeCreatePanel());
+    if (isEditing) {
+      dispatch(cancelEditingTask());
+    } else {
+      dispatch(closeCreatePanel());
+    }
     clearDraft();
   };
 
   const clearDraft = () => {
-    setTaskName('');
-    setDueDate('');
-    setDescription('');
-    SessionStorage.removeItem(DRAFT_KEY);
+    if (!isEditing) {
+      setTaskName('');
+      setDueDate('');
+      setDescription('');
+      SessionStorage.removeItem(DRAFT_KEY);
+    }
   };
 
   // Get today's date in YYYY-MM-DD format for min date
@@ -72,6 +94,10 @@ const TaskCreatePanel = () => {
 
   return (
     <div className="task-create-panel">
+      <div className="panel-header">
+        <h3>{isEditing ? 'Edit Task' : 'Create New Task'}</h3>
+      </div>
+      
       <form onSubmit={handleSubmit} className="create-form">
         <div className="form-row">
           <div className="form-group">
@@ -123,7 +149,7 @@ const TaskCreatePanel = () => {
             disabled={!taskName.trim() || !dueDate}
           >
             <IoCheckmark size={16} />
-            Create Task
+            {isEditing ? 'Update Task' : 'Create Task'}
           </button>
         </div>
       </form>

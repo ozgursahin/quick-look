@@ -18,7 +18,7 @@ import './TasksPage.css';
 
 const TasksPage = () => {
   const dispatch = useDispatch();
-  const { showCreatePanel, showTasksPanel, showCancelled, showCompleted, sortBy } = useSelector(
+  const { showCreatePanel, showTasksPanel, showCancelled, showCompleted, sortBy, editingTask } = useSelector(
     (state) => state.tasks
   );
 
@@ -67,6 +67,7 @@ const TasksPage = () => {
               <button 
                 className="btn btn-primary"
                 onClick={handleCreateTask}
+                disabled={!!editingTask} // Disable when editing
               >
                 <IoAdd size={16} />
                 Create Task
@@ -107,11 +108,11 @@ const TasksPage = () => {
             </div>
           </div>
 
-          {/* Create Task Panel */}
-          {showCreatePanel && <TaskCreatePanel />}
+          {/* Create/Edit Task Panel */}
+          {(showCreatePanel || editingTask) && <TaskCreatePanel />}
 
-          {/* Task List */}
-          <TaskList />
+          {/* Task List - Hide when editor is open */}
+          {!(showCreatePanel || editingTask) && <TaskList />}
         </div>
       )}
 

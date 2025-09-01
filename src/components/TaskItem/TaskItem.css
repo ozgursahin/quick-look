@@ -74,27 +74,44 @@
   white-space: nowrap;
 }
 
-.delete-btn {
-  background: #f44336;
-  color: white;
+.task-actions {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.action-btn {
+  background: none;
   border: none;
-  border-radius: 50%;
-  width: 32px;
-  height: 32px;
+  cursor: pointer;
+  padding: 6px;
+  border-radius: 4px;
+  transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  font-size: 14px;
-  opacity: 0.7;
-  margin-left: 10px;
+  opacity: 0.6;
+}
+
+.action-btn:hover {
+  opacity: 1;
+  transform: scale(1.1);
+}
+
+.edit-btn {
+  color: #2196F3;
+}
+
+.edit-btn:hover {
+  background: rgba(33, 150, 243, 0.1);
+}
+
+.delete-btn {
+  color: #f44336;
 }
 
 .delete-btn:hover {
-  background: #d32f2f;
-  opacity: 1;
-  transform: scale(1.1);
+  background: rgba(244, 67, 54, 0.1);
 }
 
 /* Responsive design */
@@ -121,10 +138,9 @@
     align-self: flex-end;
   }
   
-  .delete-btn {
+  .task-actions {
     order: 4;
     align-self: flex-end;
-    margin-left: 0;
     margin-top: 5px;
   }
 }
