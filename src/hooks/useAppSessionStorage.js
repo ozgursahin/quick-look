@@ -5,7 +5,7 @@ import {
   TaskStorage, 
   UserPreferencesStorage, 
   AppStateStorage 
-} from '../utils/sessionStorage';
+} from '../utils/localStorage';
 import { clearAllTasks, resetUIState } from '../store/slices/tasksSlice';
 
 /**

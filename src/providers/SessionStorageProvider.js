@@ -1,17 +1,17 @@
 import React, { createContext, useContext, useEffect, useCallback } from 'react';
 import { useSelector } from 'react-redux';
-import { SessionStorage, AppStateStorage } from '../utils/sessionStorage';
+import { SessionStorage, AppStateStorage } from '../utils/localStorage';
 
 const SessionStorageContext = createContext();
 
 /**
- * Session Storage Provider Component
- * Provides session storage functionality throughout the app
+ * Local Storage Provider Component
+ * Provides local storage functionality throughout the app (named SessionStorage for backward compatibility)
  */
 export const SessionStorageProvider = ({ children }) => {
   const appState = useSelector((state) => state);
 
-  // Auto-save to session storage on state changes
+  // Auto-save to local storage on state changes
   useEffect(() => {
     const saveTimeout = setTimeout(() => {
       if (SessionStorage.isAvailable()) {
@@ -22,9 +22,9 @@ export const SessionStorageProvider = ({ children }) => {
     return () => clearTimeout(saveTimeout);
   }, [appState]);
 
-  // Session storage operations
+  // Local storage operations (kept as sessionStorageAPI for backward compatibility)
   const sessionStorageAPI = {
-    // Check if session storage is available
+    // Check if local storage is available
     isAvailable: useCallback(() => {
       return SessionStorage.isAvailable();
     }, []),

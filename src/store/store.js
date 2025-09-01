@@ -1,9 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
 import createSagaMiddleware from 'redux-saga';
 import tasksReducer from './slices/tasksSlice';
+import notesReducer from './slices/notesSlice';
 import rootSaga from './sagas/rootSaga';
 import { sessionStorageMiddleware, sessionStorageSyncMiddleware } from './middleware/sessionStorageMiddleware';
-import { AppStateStorage } from '../utils/sessionStorage';
+import { AppStateStorage } from '../utils/localStorage';
 
 // Create saga middleware
 const sagaMiddleware = createSagaMiddleware();
@@ -14,6 +15,7 @@ const loadPersistedState = () => {
   if (savedState) {
     return {
       tasks: savedState.tasks,
+      notes: savedState.notes,
       // Add other slices here as the app grows
     };
   }
@@ -23,6 +25,7 @@ const loadPersistedState = () => {
 const store = configureStore({
   reducer: {
     tasks: tasksReducer,
+    notes: notesReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { IoClose, IoCheckmark } from 'react-icons/io5';
 import { createTaskRequest, closeCreatePanel } from '../../store/slices/tasksSlice';
-import { SessionStorage } from '../../utils/sessionStorage';
+import { SessionStorage } from '../../utils/localStorage';
 import './TaskCreatePanel.css';
 
 const DRAFT_KEY = 'quick-look-task-draft';

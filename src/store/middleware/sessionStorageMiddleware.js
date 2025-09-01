@@ -1,21 +1,21 @@
-import { AppStateStorage } from '../../utils/sessionStorage';
+import { AppStateStorage } from '../../utils/localStorage';
 
 /**
- * Redux middleware for automatic session storage persistence
- * This middleware will save the app state to session storage after every action
+ * Redux middleware for automatic local storage persistence
+ * This middleware will save the app state to local storage after every action
  */
-export const sessionStorageMiddleware = (store) => (next) => (action) => {
+export const localStorageMiddleware = (store) => (next) => (action) => {
   // Let the action pass through first
   const result = next(action);
   
   // Get the updated state
   const state = store.getState();
   
-  // Save to session storage (debounced to avoid excessive writes)
-  if (!sessionStorageMiddleware.saveTimeout) {
-    sessionStorageMiddleware.saveTimeout = setTimeout(() => {
+  // Save to local storage (debounced to avoid excessive writes)
+  if (!localStorageMiddleware.saveTimeout) {
+    localStorageMiddleware.saveTimeout = setTimeout(() => {
       AppStateStorage.saveAppState(state);
-      sessionStorageMiddleware.saveTimeout = null;
+      localStorageMiddleware.saveTimeout = null;
     }, 100); // Debounce by 100ms
   }
   
@@ -23,17 +23,20 @@ export const sessionStorageMiddleware = (store) => (next) => (action) => {
 };
 
 /**
- * Session storage sync middleware
- * This middleware ensures session storage is updated on specific actions
+ * Local storage sync middleware
+ * This middleware ensures local storage is updated on specific actions
  */
-export const sessionStorageSyncMiddleware = (store) => (next) => (action) => {
+export const localStorageSyncMiddleware = (store) => (next) => (action) => {
   const result = next(action);
   
-  // Actions that should trigger immediate session storage sync
+  // Actions that should trigger immediate local storage sync
   const immediateSync = [
     'tasks/createTaskSuccess',
     'tasks/updateTaskSuccess',
     'tasks/deleteTaskSuccess',
+    'notes/createNoteSuccess',
+    'notes/updateNoteSuccess',
+    'notes/deleteNoteSuccess',
   ];
   
   if (immediateSync.includes(action.type)) {
@@ -43,3 +46,7 @@ export const sessionStorageSyncMiddleware = (store) => (next) => (action) => {
   
   return result;
 };
+
+// For backward compatibility, export with old names
+export const sessionStorageMiddleware = localStorageMiddleware;
+export const sessionStorageSyncMiddleware = localStorageSyncMiddleware;

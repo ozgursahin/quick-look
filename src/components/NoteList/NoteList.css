@@ -1,0 +1,63 @@
+.note-list {
+  flex: 1;
+  padding: 20px 30px;
+  overflow-y: auto;
+  max-height: calc(100vh - 300px);
+}
+
+.note-list.empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+}
+
+.empty-state {
+  text-align: center;
+  color: #6b7280;
+}
+
+.empty-state p {
+  margin: 0 0 8px 0;
+  font-size: 16px;
+  font-weight: 500;
+}
+
+.empty-state small {
+  font-size: 14px;
+  opacity: 0.8;
+}
+
+/* Scrollbar styling */
+.note-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.note-list::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.05);
+  border-radius: 3px;
+}
+
+.note-list::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.2);
+  border-radius: 3px;
+}
+
+.note-list::-webkit-scrollbar-thumb:hover {
+  background: rgba(0, 0, 0, 0.3);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .note-list {
+    padding: 15px 20px;
+    max-height: calc(100vh - 280px);
+  }
+}
+
+@media (max-width: 480px) {
+  .note-list {
+    padding: 10px 15px;
+    max-height: calc(100vh - 260px);
+  }
+}

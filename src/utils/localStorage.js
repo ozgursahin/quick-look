@@ -1,9 +1,9 @@
 /**
- * Session Storage Utility
- * Provides centralized session storage management for the entire application
+ * Local Storage Utility
+ * Provides centralized local storage management for the entire application
  */
 
-const SESSION_STORAGE_KEYS = {
+const LOCAL_STORAGE_KEYS = {
   TASKS: 'quick-look-tasks',
   TASKS_UI_STATE: 'quick-look-tasks-ui-state',
   NOTES: 'quick-look-notes',
@@ -13,60 +13,60 @@ const SESSION_STORAGE_KEYS = {
 };
 
 /**
- * Generic session storage operations
+ * Generic local storage operations
  */
-export const SessionStorage = {
-  // Set data in session storage
+export const LocalStorage = {
+  // Set data in local storage
   setItem: (key, value) => {
     try {
       const serializedValue = JSON.stringify(value);
-      sessionStorage.setItem(key, serializedValue);
+      localStorage.setItem(key, serializedValue);
       return true;
     } catch (error) {
-      console.error('Error saving to session storage:', error);
+      console.error('Error saving to local storage:', error);
       return false;
     }
   },
 
-  // Get data from session storage
+  // Get data from local storage
   getItem: (key, defaultValue = null) => {
     try {
-      const item = sessionStorage.getItem(key);
+      const item = localStorage.getItem(key);
       return item ? JSON.parse(item) : defaultValue;
     } catch (error) {
-      console.error('Error reading from session storage:', error);
+      console.error('Error reading from local storage:', error);
       return defaultValue;
     }
   },
 
-  // Remove data from session storage
+  // Remove data from local storage
   removeItem: (key) => {
     try {
-      sessionStorage.removeItem(key);
+      localStorage.removeItem(key);
       return true;
     } catch (error) {
-      console.error('Error removing from session storage:', error);
+      console.error('Error removing from local storage:', error);
       return false;
     }
   },
 
-  // Clear all session storage
+  // Clear all local storage
   clear: () => {
     try {
-      sessionStorage.clear();
+      localStorage.clear();
       return true;
     } catch (error) {
-      console.error('Error clearing session storage:', error);
+      console.error('Error clearing local storage:', error);
       return false;
     }
   },
 
-  // Check if session storage is available
+  // Check if local storage is available
   isAvailable: () => {
     try {
-      const testKey = '__session_storage_test__';
-      sessionStorage.setItem(testKey, 'test');
-      sessionStorage.removeItem(testKey);
+      const testKey = '__local_storage_test__';
+      localStorage.setItem(testKey, 'test');
+      localStorage.removeItem(testKey);
       return true;
     } catch (error) {
       return false;
@@ -75,27 +75,27 @@ export const SessionStorage = {
 };
 
 /**
- * Task-specific session storage operations
+ * Task-specific local storage operations
  */
 export const TaskStorage = {
-  // Save tasks to session storage
+  // Save tasks to local storage
   saveTasks: (tasks) => {
-    return SessionStorage.setItem(SESSION_STORAGE_KEYS.TASKS, tasks);
+    return LocalStorage.setItem(LOCAL_STORAGE_KEYS.TASKS, tasks);
   },
 
-  // Load tasks from session storage
+  // Load tasks from local storage
   loadTasks: () => {
-    return SessionStorage.getItem(SESSION_STORAGE_KEYS.TASKS, []);
+    return LocalStorage.getItem(LOCAL_STORAGE_KEYS.TASKS, []);
   },
 
   // Save tasks UI state (filters, sorting, etc.)
   saveTasksUIState: (uiState) => {
-    return SessionStorage.setItem(SESSION_STORAGE_KEYS.TASKS_UI_STATE, uiState);
+    return LocalStorage.setItem(LOCAL_STORAGE_KEYS.TASKS_UI_STATE, uiState);
   },
 
   // Load tasks UI state
   loadTasksUIState: () => {
-    return SessionStorage.getItem(SESSION_STORAGE_KEYS.TASKS_UI_STATE, {
+    return LocalStorage.getItem(LOCAL_STORAGE_KEYS.TASKS_UI_STATE, {
       showCancelled: false,
       showCompleted: false,
       sortBy: 'dueDate',
@@ -105,33 +105,33 @@ export const TaskStorage = {
 
   // Clear all task data
   clearTasks: () => {
-    SessionStorage.removeItem(SESSION_STORAGE_KEYS.TASKS);
-    SessionStorage.removeItem(SESSION_STORAGE_KEYS.TASKS_UI_STATE);
+    LocalStorage.removeItem(LOCAL_STORAGE_KEYS.TASKS);
+    LocalStorage.removeItem(LOCAL_STORAGE_KEYS.TASKS_UI_STATE);
   },
 };
 
 /**
- * Note-specific session storage operations
+ * Note-specific local storage operations
  */
 export const NoteStorage = {
-  // Save notes to session storage
+  // Save notes to local storage
   saveNotes: (notes) => {
-    return SessionStorage.setItem(SESSION_STORAGE_KEYS.NOTES, notes);
+    return LocalStorage.setItem(LOCAL_STORAGE_KEYS.NOTES, notes);
   },
 
-  // Load notes from session storage
+  // Load notes from local storage
   loadNotes: () => {
-    return SessionStorage.getItem(SESSION_STORAGE_KEYS.NOTES, []);
+    return LocalStorage.getItem(LOCAL_STORAGE_KEYS.NOTES, []);
   },
 
   // Save notes UI state (filters, sorting, etc.)
   saveNotesUIState: (uiState) => {
-    return SessionStorage.setItem(SESSION_STORAGE_KEYS.NOTES_UI_STATE, uiState);
+    return LocalStorage.setItem(LOCAL_STORAGE_KEYS.NOTES_UI_STATE, uiState);
   },
 
   // Load notes UI state
   loadNotesUIState: () => {
-    return SessionStorage.getItem(SESSION_STORAGE_KEYS.NOTES_UI_STATE, {
+    return LocalStorage.getItem(LOCAL_STORAGE_KEYS.NOTES_UI_STATE, {
       sortBy: 'updatedAt',
       showCreatePanel: false,
     });
@@ -139,23 +139,23 @@ export const NoteStorage = {
 
   // Clear all note data
   clearNotes: () => {
-    SessionStorage.removeItem(SESSION_STORAGE_KEYS.NOTES);
-    SessionStorage.removeItem(SESSION_STORAGE_KEYS.NOTES_UI_STATE);
+    LocalStorage.removeItem(LOCAL_STORAGE_KEYS.NOTES);
+    LocalStorage.removeItem(LOCAL_STORAGE_KEYS.NOTES_UI_STATE);
   },
 };
 
 /**
- * User preferences session storage operations
+ * User preferences local storage operations
  */
 export const UserPreferencesStorage = {
   // Save user preferences
   savePreferences: (preferences) => {
-    return SessionStorage.setItem(SESSION_STORAGE_KEYS.USER_PREFERENCES, preferences);
+    return LocalStorage.setItem(LOCAL_STORAGE_KEYS.USER_PREFERENCES, preferences);
   },
 
   // Load user preferences
   loadPreferences: () => {
-    return SessionStorage.getItem(SESSION_STORAGE_KEYS.USER_PREFERENCES, {
+    return LocalStorage.getItem(LOCAL_STORAGE_KEYS.USER_PREFERENCES, {
       theme: 'light',
       dateFormat: 'MM-DD-YYYY',
       notifications: true,
@@ -171,7 +171,7 @@ export const UserPreferencesStorage = {
 };
 
 /**
- * App state session storage operations
+ * App state local storage operations
  */
 export const AppStateStorage = {
   // Save entire app state
@@ -182,18 +182,22 @@ export const AppStateStorage = {
       // Add other slices here as the app grows
       lastSaved: new Date().toISOString(),
     };
-    return SessionStorage.setItem(SESSION_STORAGE_KEYS.APP_STATE, stateToSave);
+    return LocalStorage.setItem(LOCAL_STORAGE_KEYS.APP_STATE, stateToSave);
   },
 
   // Load entire app state
   loadAppState: () => {
-    return SessionStorage.getItem(SESSION_STORAGE_KEYS.APP_STATE, null);
+    return LocalStorage.getItem(LOCAL_STORAGE_KEYS.APP_STATE, null);
   },
 
   // Clear app state
   clearAppState: () => {
-    return SessionStorage.removeItem(SESSION_STORAGE_KEYS.APP_STATE);
+    return LocalStorage.removeItem(LOCAL_STORAGE_KEYS.APP_STATE);
   },
 };
 
-export { SESSION_STORAGE_KEYS };
+export { LOCAL_STORAGE_KEYS };
+
+// For backward compatibility, keep the old exports but using localStorage
+export const SessionStorage = LocalStorage;
+export const SESSION_STORAGE_KEYS = LOCAL_STORAGE_KEYS;

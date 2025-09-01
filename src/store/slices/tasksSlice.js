@@ -1,17 +1,13 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { TaskStorage } from '../../utils/sessionStorage';
-import { sampleTasks, initializeSampleData } from '../../utils/sampleData';
+import { TaskStorage } from '../../utils/localStorage';
 
 // Load initial state from session storage
 const loadInitialState = () => {
-  // Initialize sample data if session storage is empty
-  initializeSampleData();
-  
   const savedTasks = TaskStorage.loadTasks();
   const savedUIState = TaskStorage.loadTasksUIState();
   
   return {
-    tasks: savedTasks.length > 0 ? savedTasks : sampleTasks,
+    tasks: savedTasks, // Use only saved tasks, no fallback to sample data
     loading: false,
     error: null,
     showCreatePanel: false, // Always start with panel closed
@@ -165,6 +161,17 @@ const tasksSlice = createSlice({
       // Save to session storage
       TaskStorage.saveTasks(state.tasks);
     },
+
+    // Development/testing action to load sample data
+    loadSampleData: (state) => {
+      const { sampleTasks } = require('../../utils/sampleData');
+      state.tasks = sampleTasks;
+      state.showCreatePanel = false;
+      state.showTasksPanel = true;
+      
+      // Save to session storage
+      TaskStorage.saveTasks(state.tasks);
+    },
   },
 });
 
@@ -188,6 +195,7 @@ export const {
   clearAllTasks,
   resetUIState,
   loadTasksFromStorage,
+  loadSampleData,
 } = tasksSlice.actions;
 
 export default tasksSlice.reducer;

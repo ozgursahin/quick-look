@@ -3,6 +3,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { IoAdd, IoClose, IoEye, IoEyeOff } from 'react-icons/io5';
 import TaskList from '../TaskList/TaskList';
 import TaskCreatePanel from '../TaskCreatePanel/TaskCreatePanel';
+import NotesPage from '../NotesPage/NotesPage';
 import NavigationTabs from '../NavigationTabs/NavigationTabs';
 import SessionStorageDebug from '../SessionStorageDebug/SessionStorageDebug';
 import DateTimePanel from '../DateTimePanel/DateTimePanel';
@@ -114,11 +115,11 @@ const TasksPage = () => {
         </div>
       )}
 
+      {/* Notes Panel */}
+      <NotesPage />
+
       {/* Navigation Tabs */}
-      <NavigationTabs 
-        showTasksPanel={showTasksPanel}
-        onToggleTasksPanel={handleClosePanel}
-      />
+      <NavigationTabs />
       
       {/* Date Time Panel - Always Visible */}
       <DateTimePanel />
