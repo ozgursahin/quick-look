@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { IoClose, IoCheckmark } from 'react-icons/io5';
+import { IoClose, IoCheckmark, IoTime, IoCreate, IoFlag } from 'react-icons/io5';
 import { createTaskRequest, updateTaskRequest, closeCreatePanel, cancelEditingTask } from '../../store/slices/tasksSlice';
 import { SessionStorage } from '../../utils/localStorage';
 import './TaskCreatePanel.css';
@@ -30,6 +30,18 @@ const TaskCreatePanel = () => {
     const draft = SessionStorage.getItem(DRAFT_KEY, {});
     return draft.description || '';
   });
+
+  // Format date for display
+  const formatDateTime = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
 
   // Save draft to session storage whenever form data changes (only when creating)
   useEffect(() => {
@@ -96,6 +108,24 @@ const TaskCreatePanel = () => {
     <div className="task-create-panel">
       <div className="panel-header">
         <h3>{isEditing ? 'Edit Task' : 'Create New Task'}</h3>
+        {isEditing && editingTask && (
+          <div className="task-edit-metrics">
+            <span className="metric">
+              <IoCreate size={12} />
+              Created: {formatDateTime(editingTask.createdAt)}
+            </span>
+            <span className="metric">
+              <IoTime size={12} />
+              Updated: {formatDateTime(editingTask.updatedAt)}
+            </span>
+            {editingTask.completedAt && (
+              <span className="metric completion-metric">
+                <IoFlag size={12} />
+                Completed: {formatDateTime(editingTask.completedAt)}
+              </span>
+            )}
+          </div>
+        )}
       </div>
       
       <form onSubmit={handleSubmit} className="create-form">

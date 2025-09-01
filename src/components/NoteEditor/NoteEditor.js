@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { IoClose, IoCheckmark, IoAdd, IoRemove } from 'react-icons/io5';
+import { IoClose, IoCheckmark, IoAdd, IoRemove, IoTime, IoCreate } from 'react-icons/io5';
 import { createNoteRequest, updateNoteRequest, closeCreatePanel, cancelEditingNote } from '../../store/slices/notesSlice';
 import { SessionStorage } from '../../utils/localStorage';
 import './NoteEditor.css';
@@ -32,6 +32,18 @@ const NoteEditor = () => {
   });
   
   const [newTag, setNewTag] = useState('');
+
+  // Format date for display
+  const formatDateTime = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
+    });
+  };
 
   // Save draft to session storage whenever form data changes (only when creating)
   useEffect(() => {
@@ -114,6 +126,18 @@ const NoteEditor = () => {
     <div className="note-editor">
       <div className="editor-header">
         <h3>{isEditing ? 'Edit Note' : 'Create New Note'}</h3>
+        {isEditing && editingNote && (
+          <div className="note-edit-metrics">
+            <span className="metric">
+              <IoCreate size={12} />
+              Created: {formatDateTime(editingNote.createdAt)}
+            </span>
+            <span className="metric">
+              <IoTime size={12} />
+              Updated: {formatDateTime(editingNote.updatedAt)}
+            </span>
+          </div>
+        )}
       </div>
       
       <form onSubmit={handleSubmit} className="editor-form">

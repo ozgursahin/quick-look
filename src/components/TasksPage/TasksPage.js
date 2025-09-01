@@ -96,6 +96,9 @@ const TasksPage = () => {
                   <option value="dueDate">Due Date</option>
                   <option value="name">Name</option>
                   <option value="status">Status</option>
+                  <option value="createdAt">Created Date</option>
+                  <option value="updatedAt">Updated Date</option>
+                  <option value="completedAt">Completion Date</option>
                 </select>
               </div>
               <button 

@@ -58,11 +58,23 @@ const tasksSlice = createSlice({
       state.loading = false;
       const index = state.tasks.findIndex(task => task.id === action.payload.id);
       if (index !== -1) {
-        state.tasks[index] = { 
+        const updatedTask = { 
           ...state.tasks[index], 
           ...action.payload,
           updatedAt: new Date().toISOString(),
         };
+        
+        // Set completion date when task is marked as completed
+        if (action.payload.status === 'completed' && state.tasks[index].status !== 'completed') {
+          updatedTask.completedAt = new Date().toISOString();
+        }
+        
+        // Clear completion date if task is moved away from completed status
+        if (action.payload.status !== 'completed' && state.tasks[index].status === 'completed') {
+          delete updatedTask.completedAt;
+        }
+        
+        state.tasks[index] = updatedTask;
       }
       state.editingTask = null;
       

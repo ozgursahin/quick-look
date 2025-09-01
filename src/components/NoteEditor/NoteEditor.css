@@ -14,10 +14,26 @@
 }
 
 .editor-header h3 {
-  margin: 0;
+  margin: 0 0 8px 0;
   font-size: 18px;
   font-weight: 600;
   color: #374151;
+}
+
+.note-edit-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.note-edit-metrics .metric {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: #6b7280;
+  white-space: nowrap;
 }
 
 .editor-form {
@@ -228,6 +244,16 @@
   
   .tag-input {
     flex: 1;
+  }
+  
+  .note-edit-metrics {
+    flex-direction: column;
+    gap: 6px;
+    align-items: flex-start;
+  }
+  
+  .note-edit-metrics .metric {
+    font-size: 10px;
   }
 }
 

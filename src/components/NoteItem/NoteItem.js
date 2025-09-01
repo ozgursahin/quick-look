@@ -1,6 +1,6 @@
 import React from 'react';
 import { FaTrash, FaEdit } from 'react-icons/fa';
-import { IoDocument, IoTime } from 'react-icons/io5';
+import { IoDocument, IoTime, IoCreate } from 'react-icons/io5';
 import './NoteItem.css';
 
 const NoteItem = ({ note, onEdit, onDelete }) => {
@@ -73,6 +73,10 @@ const NoteItem = ({ note, onEdit, onDelete }) => {
       
       <div className="note-footer">
         <div className="note-dates">
+          <span className="note-date">
+            <IoCreate size={12} />
+            Created: {formatDate(note.createdAt)}
+          </span>
           <span className="note-date">
             <IoTime size={12} />
             Modified: {formatDate(note.updatedAt)}

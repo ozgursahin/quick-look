@@ -52,6 +52,7 @@ export const sampleTasks = [
     status: 'completed',
     createdAt: '2025-08-25T11:00:00.000Z',
     updatedAt: '2025-08-26T15:30:00.000Z',
+    completedAt: '2025-08-26T15:30:00.000Z',
   },
   {
     id: '3',

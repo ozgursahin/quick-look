@@ -68,6 +68,27 @@
   max-width: 100%;
 }
 
+.task-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+  margin-top: 8px;
+}
+
+.metric {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  color: #6b7280;
+  white-space: nowrap;
+}
+
+.completion-metric {
+  color: #10b981;
+  font-weight: 500;
+}
+
 .task-due-date {
   color: #666;
   font-size: 14px;
@@ -142,5 +163,15 @@
     order: 4;
     align-self: flex-end;
     margin-top: 5px;
+  }
+  
+  .task-metrics {
+    flex-direction: column;
+    gap: 6px;
+    align-items: flex-start;
+  }
+  
+  .metric {
+    font-size: 10px;
   }
 }

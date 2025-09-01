@@ -1,6 +1,6 @@
 import React from 'react';
 import { FaTrash, FaEdit } from 'react-icons/fa';
-import { IoTime, IoCheckmarkCircle, IoBanOutline } from 'react-icons/io5';
+import { IoTime, IoCheckmarkCircle, IoBanOutline, IoCreate, IoFlag } from 'react-icons/io5';
 import './TaskItem.css';
 
 const TaskItem = ({ task, onStatusChange, onEdit, onDelete }) => {
@@ -10,6 +10,17 @@ const TaskItem = ({ task, onStatusChange, onEdit, onDelete }) => {
       month: '2-digit',
       day: '2-digit',
       year: 'numeric'
+    });
+  };
+
+  const formatDateTime = (dateString) => {
+    const date = new Date(dateString);
+    return date.toLocaleDateString('en-US', {
+      month: 'short',
+      day: 'numeric',
+      year: 'numeric',
+      hour: '2-digit',
+      minute: '2-digit'
     });
   };
 
@@ -88,6 +99,22 @@ const TaskItem = ({ task, onStatusChange, onEdit, onDelete }) => {
         {task.description && (
           <div className="task-description">{task.description}</div>
         )}
+        <div className="task-metrics">
+          <span className="metric">
+            <IoCreate size={12} />
+            Created: {formatDateTime(task.createdAt)}
+          </span>
+          <span className="metric">
+            <IoTime size={12} />
+            Updated: {formatDateTime(task.updatedAt)}
+          </span>
+          {task.completedAt && (
+            <span className="metric completion-metric">
+              <IoFlag size={12} />
+              Completed: {formatDateTime(task.completedAt)}
+            </span>
+          )}
+        </div>
       </div>
       
       <div className="task-due-date">

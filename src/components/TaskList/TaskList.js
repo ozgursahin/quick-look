@@ -39,6 +39,18 @@ const TaskList = () => {
       case 'status':
         const statusOrder = { waiting: 0, completed: 1, cancelled: 2 };
         return statusOrder[a.status] - statusOrder[b.status];
+      case 'createdAt':
+        return new Date(b.createdAt) - new Date(a.createdAt); // Newest first
+      case 'updatedAt':
+        return new Date(b.updatedAt) - new Date(a.updatedAt); // Most recently updated first
+      case 'completedAt':
+        // Show completed tasks by completion date, others by due date
+        if (a.status === 'completed' && b.status === 'completed') {
+          return new Date(b.completedAt || 0) - new Date(a.completedAt || 0);
+        }
+        if (a.status === 'completed') return 1;
+        if (b.status === 'completed') return -1;
+        return new Date(a.dueDate) - new Date(b.dueDate);
       default:
         return 0;
     }
