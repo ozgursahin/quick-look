@@ -113,21 +113,21 @@ const TasksPage = () => {
                 onClick={handleToggleCancelled}
               >
                 {showCancelled ? <IoEyeOff size={14} /> : <IoEye size={14} />}
-                Show Cancelled
+                Cancelled
               </button>
               <button 
                 className={`btn btn-filter ${showCompleted ? 'active' : ''}`}
                 onClick={handleToggleCompleted}
               >
                 {showCompleted ? <IoEyeOff size={14} /> : <IoEye size={14} />}
-                Show Completed
+                Completed
               </button>
               <button 
                 className={`btn btn-filter ${showArchived ? 'active' : ''}`}
                 onClick={handleToggleArchived}
               >
                 <IoArchive size={14} />
-                {showArchived ? 'Hide Archived' : 'Show Archived'}
+                Archived
               </button>
               <div className="sort-control">
                 <span>Sort by:</span>

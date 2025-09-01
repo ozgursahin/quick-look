@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react';
+import React, { useRef, useState, useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { IoClose, IoCloudUpload, IoRefresh, IoCheckmark } from 'react-icons/io5';
 import {
@@ -8,7 +8,11 @@ import {
   setBackgroundOpacity,
   setBackgroundBlur,
   resetBackgroundToDefault,
+  clearUploadError,
+  setUploadLoading,
+  setUploadError,
 } from '../../store/slices/settingsSlice';
+import { ImageCompressor } from '../../utils/imageCompressor';
 import './SettingsPanel.css';
 
 const SettingsPanel = () => {
@@ -17,42 +21,33 @@ const SettingsPanel = () => {
     backgroundImage, 
     useCustomBackground, 
     backgroundOpacity, 
-    backgroundBlur 
+    backgroundBlur,
+    uploadLoading,
+    uploadError
   } = useSelector(state => state.settings);
   
   const fileInputRef = useRef(null);
   const [dragOver, setDragOver] = useState(false);
-  const [uploadError, setUploadError] = useState(null);
+
+  // Clear upload error when component mounts
+  useEffect(() => {
+    dispatch(clearUploadError());
+  }, [dispatch]);
 
   const handleClose = () => {
     dispatch(closeSettingsPanel());
   };
 
-  const handleImageUpload = (file) => {
-    setUploadError(null);
+  const handleImageUpload = async (file) => {
+    dispatch(clearUploadError());
+    dispatch(setUploadLoading(true));
     
-    // Validate file type
-    if (!file.type.startsWith('image/')) {
-      setUploadError('Please select a valid image file.');
-      return;
+    try {
+      const compressedDataUrl = await ImageCompressor.validateAndCompress(file);
+      dispatch(setBackgroundImage(compressedDataUrl));
+    } catch (error) {
+      dispatch(setUploadError(error.message));
     }
-
-    // Validate file size (max 5MB)
-    if (file.size > 5 * 1024 * 1024) {
-      setUploadError('Image file size must be less than 5MB.');
-      return;
-    }
-
-    const reader = new FileReader();
-    reader.onload = (e) => {
-      const dataUrl = e.target.result;
-      // Save the image and automatically apply it
-      dispatch(setBackgroundImage(dataUrl));
-    };
-    reader.onerror = () => {
-      setUploadError('Error reading the image file.');
-    };
-    reader.readAsDataURL(file);
   };
 
   const handleFileInputChange = (e) => {
@@ -106,7 +101,6 @@ const SettingsPanel = () => {
 
   const handleResetToDefault = () => {
     dispatch(resetBackgroundToDefault());
-    setUploadError(null);
   };
 
   return (
@@ -171,7 +165,12 @@ const SettingsPanel = () => {
               style={{ display: 'none' }}
             />
             
-              {backgroundImage ? (
+            {uploadLoading ? (
+              <div className="upload-loading">
+                <div className="loading-spinner"></div>
+                <p>Uploading image...</p>
+              </div>
+            ) : backgroundImage ? (
               <div className="uploaded-image-preview">
                 <img 
                   src={backgroundImage} 
