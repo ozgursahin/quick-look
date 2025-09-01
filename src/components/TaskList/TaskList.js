@@ -1,12 +1,18 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import TaskItem from '../TaskItem/TaskItem';
-import { updateTaskRequest, deleteTaskRequest, setEditingTask } from '../../store/slices/tasksSlice';
+import { 
+  updateTaskRequest, 
+  deleteTaskRequest, 
+  setEditingTask,
+  archiveTaskRequest,
+  unarchiveTaskRequest
+} from '../../store/slices/tasksSlice';
 import './TaskList.css';
 
 const TaskList = () => {
   const dispatch = useDispatch();
-  const { tasks, showCancelled, showCompleted, sortBy } = useSelector(
+  const { tasks, showCancelled, showCompleted, showArchived, sortBy, labelFilter } = useSelector(
     (state) => state.tasks
   );
 
@@ -22,10 +28,29 @@ const TaskList = () => {
     dispatch(setEditingTask(task));
   };
 
-  // Filter tasks based on visibility settings
+  const handleTaskArchive = (taskId) => {
+    dispatch(archiveTaskRequest(taskId));
+  };
+
+  const handleTaskUnarchive = (taskId) => {
+    dispatch(unarchiveTaskRequest(taskId));
+  };
+
+  // Filter tasks based on visibility settings and labels
   const filteredTasks = tasks.filter((task) => {
+    // Filter by archived status
+    if (!showArchived && task.archived) return false;
+    if (showArchived && !task.archived) return false;
+    
+    // Filter by status
     if (!showCompleted && task.status === 'completed') return false;
     if (!showCancelled && task.status === 'cancelled') return false;
+    
+    // Filter by label
+    if (labelFilter && (!task.labels || !task.labels.includes(labelFilter))) {
+      return false;
+    }
+    
     return true;
   });
 
@@ -60,8 +85,19 @@ const TaskList = () => {
     return (
       <div className="task-list empty">
         <div className="empty-state">
-          <p>No tasks to display</p>
-          <small>Create a new task to get started</small>
+          {showArchived ? (
+            <p>No archived tasks</p>
+          ) : labelFilter ? (
+            <>
+              <p>No tasks found with label "{labelFilter}"</p>
+              <small>Try a different label or clear the filter</small>
+            </>
+          ) : (
+            <>
+              <p>No tasks to display</p>
+              <small>Create a new task to get started</small>
+            </>
+          )}
         </div>
       </div>
     );
@@ -76,6 +112,8 @@ const TaskList = () => {
           onStatusChange={handleTaskStatusChange}
           onEdit={handleTaskEdit}
           onDelete={handleTaskDelete}
+          onArchive={handleTaskArchive}
+          onUnarchive={handleTaskUnarchive}
         />
       ))}
     </div>

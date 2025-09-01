@@ -14,8 +14,10 @@ const loadInitialState = () => {
     showTasksPanel: true, // Panel is visible by default
     showCancelled: savedUIState.showCancelled,
     showCompleted: savedUIState.showCompleted,
+    showArchived: savedUIState.showArchived || false,
     sortBy: savedUIState.sortBy,
     editingTask: null, // For tracking which task is being edited
+    labelFilter: savedUIState.labelFilter || '', // For filtering by label
   };
 };
 
@@ -37,6 +39,8 @@ const tasksSlice = createSlice({
         description: action.payload.description || '',
         dueDate: action.payload.dueDate,
         status: 'waiting',
+        labels: action.payload.labels || [],
+        archived: false,
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
@@ -124,7 +128,9 @@ const tasksSlice = createSlice({
       TaskStorage.saveTasksUIState({
         showCancelled: state.showCancelled,
         showCompleted: state.showCompleted,
+        showArchived: state.showArchived,
         sortBy: state.sortBy,
+        labelFilter: state.labelFilter,
       });
     },
     toggleShowCompleted: (state) => {
@@ -134,7 +140,21 @@ const tasksSlice = createSlice({
       TaskStorage.saveTasksUIState({
         showCancelled: state.showCancelled,
         showCompleted: state.showCompleted,
+        showArchived: state.showArchived,
         sortBy: state.sortBy,
+        labelFilter: state.labelFilter,
+      });
+    },
+    toggleShowArchived: (state) => {
+      state.showArchived = !state.showArchived;
+      
+      // Save UI state to session storage
+      TaskStorage.saveTasksUIState({
+        showCancelled: state.showCancelled,
+        showCompleted: state.showCompleted,
+        showArchived: state.showArchived,
+        sortBy: state.sortBy,
+        labelFilter: state.labelFilter,
       });
     },
     setSortBy: (state, action) => {
@@ -144,8 +164,58 @@ const tasksSlice = createSlice({
       TaskStorage.saveTasksUIState({
         showCancelled: state.showCancelled,
         showCompleted: state.showCompleted,
+        showArchived: state.showArchived,
         sortBy: state.sortBy,
+        labelFilter: state.labelFilter,
       });
+    },
+    
+    setLabelFilter: (state, action) => {
+      state.labelFilter = action.payload;
+      
+      // Save UI state to session storage
+      TaskStorage.saveTasksUIState({
+        showCancelled: state.showCancelled,
+        showCompleted: state.showCompleted,
+        showArchived: state.showArchived,
+        sortBy: state.sortBy,
+        labelFilter: state.labelFilter,
+      });
+    },
+    
+    archiveTaskRequest: (state, action) => {
+      state.loading = true;
+    },
+    archiveTaskSuccess: (state, action) => {
+      state.loading = false;
+      const index = state.tasks.findIndex(task => task.id === action.payload);
+      if (index !== -1) {
+        state.tasks[index] = { 
+          ...state.tasks[index], 
+          archived: true,
+          updatedAt: new Date().toISOString(),
+        };
+      }
+      
+      // Save to session storage
+      TaskStorage.saveTasks(state.tasks);
+    },
+    unarchiveTaskRequest: (state, action) => {
+      state.loading = true;
+    },
+    unarchiveTaskSuccess: (state, action) => {
+      state.loading = false;
+      const index = state.tasks.findIndex(task => task.id === action.payload);
+      if (index !== -1) {
+        state.tasks[index] = { 
+          ...state.tasks[index], 
+          archived: false,
+          updatedAt: new Date().toISOString(),
+        };
+      }
+      
+      // Save to session storage
+      TaskStorage.saveTasks(state.tasks);
     },
     
     // Edit mode actions
@@ -170,16 +240,20 @@ const tasksSlice = createSlice({
     resetUIState: (state) => {
       state.showCancelled = false;
       state.showCompleted = false;
+      state.showArchived = false;
       state.sortBy = 'dueDate';
       state.showCreatePanel = false;
       state.showTasksPanel = true;
       state.editingTask = null;
+      state.labelFilter = '';
       
       // Reset UI state in session storage
       TaskStorage.saveTasksUIState({
         showCancelled: false,
         showCompleted: false,
+        showArchived: false,
         sortBy: 'dueDate',
+        labelFilter: '',
       });
     },
 
@@ -219,9 +293,15 @@ export const {
   closeTasksPanel,
   toggleShowCancelled,
   toggleShowCompleted,
+  toggleShowArchived,
   setSortBy,
+  setLabelFilter,
   setEditingTask,
   cancelEditingTask,
+  archiveTaskRequest,
+  archiveTaskSuccess,
+  unarchiveTaskRequest,
+  unarchiveTaskSuccess,
   clearAllTasks,
   resetUIState,
   loadTasksFromStorage,

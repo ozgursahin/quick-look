@@ -1,9 +1,9 @@
 import React from 'react';
 import { FaTrash, FaEdit } from 'react-icons/fa';
-import { IoTime, IoCheckmarkCircle, IoBanOutline, IoCreate, IoFlag } from 'react-icons/io5';
+import { IoTime, IoCheckmarkCircle, IoBanOutline, IoCreate, IoFlag, IoArchive, IoRefresh } from 'react-icons/io5';
 import './TaskItem.css';
 
-const TaskItem = ({ task, onStatusChange, onEdit, onDelete }) => {
+const TaskItem = ({ task, onStatusChange, onEdit, onDelete, onArchive, onUnarchive }) => {
   const formatDate = (dateString) => {
     const date = new Date(dateString);
     return date.toLocaleDateString('en-US', {
@@ -82,8 +82,16 @@ const TaskItem = ({ task, onStatusChange, onEdit, onDelete }) => {
     onEdit(task);
   };
 
+  const handleArchive = () => {
+    if (task.archived) {
+      onUnarchive(task.id);
+    } else {
+      onArchive(task.id);
+    }
+  };
+
   return (
-    <div className="task-item">
+    <div className={`task-item ${task.archived ? 'archived' : ''}`}>
       <div 
         className="status-badge" 
         style={{ backgroundColor: getStatusColor(task.status) }}
@@ -95,9 +103,19 @@ const TaskItem = ({ task, onStatusChange, onEdit, onDelete }) => {
       </div>
       
       <div className="task-content">
-        <div className="task-name">{task.name}</div>
+        <div className="task-name">
+          {task.name}
+          {task.archived && <span className="archived-badge">Archived</span>}
+        </div>
         {task.description && (
           <div className="task-description">{task.description}</div>
+        )}
+        {task.labels && task.labels.length > 0 && (
+          <div className="task-labels">
+            {task.labels.map((label, index) => (
+              <span key={index} className="task-label">{label}</span>
+            ))}
+          </div>
         )}
         <div className="task-metrics">
           <span className="metric">
@@ -128,6 +146,13 @@ const TaskItem = ({ task, onStatusChange, onEdit, onDelete }) => {
           title="Edit task"
         >
           <FaEdit size={12} />
+        </button>
+        <button 
+          className="action-btn archive-btn"
+          onClick={handleArchive}
+          title={task.archived ? "Unarchive task" : "Archive task"}
+        >
+          {task.archived ? <IoRefresh size={12} /> : <IoArchive size={12} />}
         </button>
         <button 
           className="action-btn delete-btn"

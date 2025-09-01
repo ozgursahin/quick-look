@@ -1,18 +1,20 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { IoAdd, IoClose } from 'react-icons/io5';
+import { IoAdd, IoClose, IoSearch, IoCloseCircle } from 'react-icons/io5';
 import NoteList from '../NoteList/NoteList';
 import NoteEditor from '../NoteEditor/NoteEditor';
 import {
   toggleCreatePanel,
   toggleNotesPanel,
   setSortBy,
+  setSearchQuery,
+  clearSearch,
 } from '../../store/slices/notesSlice';
 import './NotesPage.css';
 
 const NotesPage = () => {
   const dispatch = useDispatch();
-  const { showCreatePanel, showNotesPanel, sortBy, editingNote } = useSelector(
+  const { showCreatePanel, showNotesPanel, sortBy, editingNote, searchQuery } = useSelector(
     (state) => state.notes
   );
 
@@ -28,6 +30,14 @@ const NotesPage = () => {
     dispatch(toggleNotesPanel());
   };
 
+  const handleSearchChange = (e) => {
+    dispatch(setSearchQuery(e.target.value));
+  };
+
+  const handleClearSearch = () => {
+    dispatch(clearSearch());
+  };
+
   if (!showNotesPanel) {
     return null;
   }
@@ -37,6 +47,27 @@ const NotesPage = () => {
       <div className="notes-header">
         <h1>Notes</h1>
         <div className="notes-controls">
+          <div className="search-control">
+            <div className="search-input-wrapper">
+              <IoSearch size={16} className="search-icon" />
+              <input
+                type="text"
+                placeholder="Search notes..."
+                value={searchQuery}
+                onChange={handleSearchChange}
+                className="search-input"
+              />
+              {searchQuery && (
+                <button
+                  onClick={handleClearSearch}
+                  className="clear-search-btn"
+                  title="Clear search"
+                >
+                  <IoCloseCircle size={16} />
+                </button>
+              )}
+            </div>
+          </div>
           <button 
             className="btn btn-primary"
             onClick={handleCreateNote}

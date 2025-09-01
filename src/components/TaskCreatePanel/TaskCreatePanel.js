@@ -31,6 +31,12 @@ const TaskCreatePanel = () => {
     return draft.description || '';
   });
 
+  const [labels, setLabels] = useState(() => {
+    if (isEditing) return (editingTask.labels || []).join(', ');
+    const draft = SessionStorage.getItem(DRAFT_KEY, {});
+    return draft.labels || '';
+  });
+
   // Format date for display
   const formatDateTime = (dateString) => {
     const date = new Date(dateString);
@@ -50,31 +56,36 @@ const TaskCreatePanel = () => {
         taskName: taskName.trim(),
         dueDate,
         description: description.trim(),
+        labels: labels.trim(),
         lastModified: new Date().toISOString(),
       };
       
       // Only save if there's actual content
-      if (taskName.trim() || dueDate || description.trim()) {
+      if (taskName.trim() || dueDate || description.trim() || labels.trim()) {
         SessionStorage.setItem(DRAFT_KEY, draft);
       }
     }
-  }, [taskName, dueDate, description, isEditing]);
+  }, [taskName, dueDate, description, labels, isEditing]);
 
   const handleSubmit = (e) => {
     e.preventDefault();
     if (taskName.trim() && dueDate) {
+      const labelArray = labels.split(',').map(label => label.trim()).filter(label => label.length > 0);
+      
       if (isEditing) {
         dispatch(updateTaskRequest({
           id: editingTask.id,
           name: taskName.trim(),
           dueDate: dueDate,
           description: description.trim(),
+          labels: labelArray,
         }));
       } else {
         dispatch(createTaskRequest({
           name: taskName.trim(),
           dueDate: dueDate,
           description: description.trim(),
+          labels: labelArray,
         }));
       }
       
@@ -97,6 +108,7 @@ const TaskCreatePanel = () => {
       setTaskName('');
       setDueDate('');
       setDescription('');
+      setLabels('');
       SessionStorage.removeItem(DRAFT_KEY);
     }
   };
@@ -151,6 +163,17 @@ const TaskCreatePanel = () => {
               required
             />
           </div>
+        </div>
+        
+        {/* Labels input */}
+        <div className="form-group">
+          <input
+            type="text"
+            placeholder="Labels (comma-separated, e.g. work, urgent, home)"
+            value={labels}
+            onChange={(e) => setLabels(e.target.value)}
+            className="form-input"
+          />
         </div>
         
         {/* Description/Notes area */}

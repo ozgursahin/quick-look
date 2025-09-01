@@ -205,6 +205,29 @@
   flex-wrap: wrap;
 }
 
+.label-filter-control {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #666;
+}
+
+.label-filter-select {
+  padding: 6px 10px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  background: white;
+  cursor: pointer;
+  min-width: 120px;
+}
+
+.label-filter-select:focus {
+  outline: none;
+  border-color: #6366f1;
+}
+
 .btn {
   padding: 8px 16px;
   border: none;

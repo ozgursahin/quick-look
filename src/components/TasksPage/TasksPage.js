@@ -1,6 +1,6 @@
 import React from 'react';
 import { useSelector, useDispatch } from 'react-redux';
-import { IoAdd, IoClose, IoEye, IoEyeOff } from 'react-icons/io5';
+import { IoAdd, IoClose, IoEye, IoEyeOff, IoArchive } from 'react-icons/io5';
 import TaskList from '../TaskList/TaskList';
 import TaskCreatePanel from '../TaskCreatePanel/TaskCreatePanel';
 import NotesPage from '../NotesPage/NotesPage';
@@ -12,13 +12,15 @@ import {
   toggleTasksPanel,
   toggleShowCancelled,
   toggleShowCompleted,
+  toggleShowArchived,
   setSortBy,
+  setLabelFilter,
 } from '../../store/slices/tasksSlice';
 import './TasksPage.css';
 
 const TasksPage = () => {
   const dispatch = useDispatch();
-  const { showCreatePanel, showTasksPanel, showCancelled, showCompleted, sortBy, editingTask } = useSelector(
+  const { showCreatePanel, showTasksPanel, showCancelled, showCompleted, showArchived, sortBy, editingTask, labelFilter, tasks } = useSelector(
     (state) => state.tasks
   );
 
@@ -34,13 +36,26 @@ const TasksPage = () => {
     dispatch(toggleShowCompleted());
   };
 
+  const handleToggleArchived = () => {
+    dispatch(toggleShowArchived());
+  };
+
   const handleSortChange = (newSortBy) => {
     dispatch(setSortBy(newSortBy));
+  };
+
+  const handleLabelFilterChange = (e) => {
+    dispatch(setLabelFilter(e.target.value));
   };
 
   const handleClosePanel = () => {
     dispatch(toggleTasksPanel());
   };
+
+  // Get unique labels from all tasks for filter dropdown
+  const availableLabels = [...new Set(
+    tasks.flatMap(task => task.labels || [])
+  )].sort();
 
   return (
     <div className="tasks-page">
@@ -64,6 +79,19 @@ const TasksPage = () => {
           <div className="task-header">
             <h1>Tasks</h1>
             <div className="task-controls">
+              <div className="label-filter-control">
+                <span>Label:</span>
+                <select
+                  value={labelFilter}
+                  onChange={handleLabelFilterChange}
+                  className="label-filter-select"
+                >
+                  <option value="">All Labels</option>
+                  {availableLabels.map(label => (
+                    <option key={label} value={label}>{label}</option>
+                  ))}
+                </select>
+              </div>
               <button 
                 className="btn btn-primary"
                 onClick={handleCreateTask}
@@ -85,6 +113,13 @@ const TasksPage = () => {
               >
                 {showCompleted ? <IoEyeOff size={14} /> : <IoEye size={14} />}
                 Show Completed
+              </button>
+              <button 
+                className={`btn btn-filter ${showArchived ? 'active' : ''}`}
+                onClick={handleToggleArchived}
+              >
+                <IoArchive size={14} />
+                {showArchived ? 'Hide Archived' : 'Show Archived'}
               </button>
               <div className="sort-control">
                 <span>Sort by:</span>

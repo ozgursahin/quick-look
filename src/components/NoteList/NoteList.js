@@ -6,7 +6,7 @@ import './NoteList.css';
 
 const NoteList = () => {
   const dispatch = useDispatch();
-  const { notes, sortBy } = useSelector(
+  const { notes, sortBy, searchQuery } = useSelector(
     (state) => state.notes
   );
 
@@ -18,8 +18,20 @@ const NoteList = () => {
     dispatch(deleteNoteRequest(noteId));
   };
 
+  // Filter notes based on search query
+  const filteredNotes = notes.filter((note) => {
+    if (!searchQuery) return true;
+    
+    const query = searchQuery.toLowerCase();
+    return (
+      note.title.toLowerCase().includes(query) ||
+      note.content.toLowerCase().includes(query) ||
+      (note.tags && note.tags.some(tag => tag.toLowerCase().includes(query)))
+    );
+  });
+
   // Sort notes
-  const sortedNotes = [...notes].sort((a, b) => {
+  const sortedNotes = [...filteredNotes].sort((a, b) => {
     switch (sortBy) {
       case 'updatedAt':
         return new Date(b.updatedAt) - new Date(a.updatedAt);
@@ -36,8 +48,17 @@ const NoteList = () => {
     return (
       <div className="note-list empty">
         <div className="empty-state">
-          <p>No notes to display</p>
-          <small>Create a new note to get started</small>
+          {searchQuery ? (
+            <>
+              <p>No notes found for "{searchQuery}"</p>
+              <small>Try a different search term</small>
+            </>
+          ) : (
+            <>
+              <p>No notes to display</p>
+              <small>Create a new note to get started</small>
+            </>
+          )}
         </div>
       </div>
     );

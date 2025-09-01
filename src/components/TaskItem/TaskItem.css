@@ -7,8 +7,17 @@
   gap: 20px;
 }
 
+.task-item.archived {
+  opacity: 0.7;
+  background-color: #f5f5f5;
+}
+
 .task-item:hover {
   background-color: #f9f9f9;
+}
+
+.task-item.archived:hover {
+  background-color: #eeeeee;
 }
 
 .task-item:last-child {
@@ -52,6 +61,35 @@
   color: #333;
   font-weight: 500;
   line-height: 1.4;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.archived-badge {
+  background: #999;
+  color: white;
+  font-size: 10px;
+  padding: 2px 6px;
+  border-radius: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.task-labels {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 4px;
+}
+
+.task-label {
+  background: #667eea;
+  color: white;
+  font-size: 11px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-weight: 500;
 }
 
 .task-description {
@@ -125,6 +163,14 @@
 
 .edit-btn:hover {
   background: rgba(33, 150, 243, 0.1);
+}
+
+.archive-btn {
+  color: #FF9800;
+}
+
+.archive-btn:hover {
+  background: rgba(255, 152, 0, 0.1);
 }
 
 .delete-btn {

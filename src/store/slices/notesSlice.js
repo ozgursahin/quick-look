@@ -14,6 +14,7 @@ const loadInitialState = () => {
     showNotesPanel: false, // Panel is hidden by default
     sortBy: savedUIState.sortBy,
     editingNote: null, // For tracking which note is being edited
+    searchQuery: '', // For search functionality
   };
 };
 
@@ -123,6 +124,14 @@ const notesSlice = createSlice({
       state.editingNote = null;
     },
     
+    // Search actions
+    setSearchQuery: (state, action) => {
+      state.searchQuery = action.payload;
+    },
+    clearSearch: (state) => {
+      state.searchQuery = '';
+    },
+    
     // Data management actions for session storage
     clearAllNotes: (state) => {
       state.notes = [];
@@ -183,6 +192,8 @@ export const {
   setSortBy,
   setEditingNote,
   cancelEditingNote,
+  setSearchQuery,
+  clearSearch,
   clearAllNotes,
   resetUIState,
   loadNotesFromStorage,
