@@ -5,7 +5,6 @@ import TaskList from '../TaskList/TaskList';
 import TaskCreatePanel from '../TaskCreatePanel/TaskCreatePanel';
 import NotesPage from '../NotesPage/NotesPage';
 import PomodoroPanel from '../PomodoroPanel/PomodoroPanel';
-import PomodoroStatus from '../PomodoroStatus/PomodoroStatus';
 import NavigationTabs from '../NavigationTabs/NavigationTabs';
 import SessionStorageDebug from '../SessionStorageDebug/SessionStorageDebug';
 import DateTimePanel from '../DateTimePanel/DateTimePanel';
@@ -64,9 +63,6 @@ const TasksPage = () => {
     <div className="tasks-page">
       {/* Session Storage Debug Panel (development only) */}
       <SessionStorageDebug />
-      
-      {/* Pomodoro Status - Always visible when timer is active */}
-      <PomodoroStatus />
       
       {/* Sky decorations */}
       <div className="cloud cloud-1"></div>
