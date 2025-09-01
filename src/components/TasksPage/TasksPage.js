@@ -8,6 +8,7 @@ import PomodoroPanel from '../PomodoroPanel/PomodoroPanel';
 import NavigationTabs from '../NavigationTabs/NavigationTabs';
 import SessionStorageDebug from '../SessionStorageDebug/SessionStorageDebug';
 import DateTimePanel from '../DateTimePanel/DateTimePanel';
+import SettingsPanel from '../SettingsPanel/SettingsPanel';
 import {
   toggleCreatePanel,
   toggleTasksPanel,
@@ -25,6 +26,7 @@ const TasksPage = () => {
     (state) => state.tasks
   );
   const { showPomodoroPanel } = useSelector(state => state.pomodoro);
+  const { showSettingsPanel, useCustomBackground } = useSelector(state => state.settings);
 
   const handleCreateTask = () => {
     dispatch(toggleCreatePanel());
@@ -60,20 +62,24 @@ const TasksPage = () => {
   )].sort();
 
   return (
-    <div className="tasks-page">
+    <div className={`tasks-page ${useCustomBackground ? 'custom-background' : ''}`}>
       {/* Session Storage Debug Panel (development only) */}
       <SessionStorageDebug />
       
-      {/* Sky decorations */}
-      <div className="cloud cloud-1"></div>
-      <div className="cloud cloud-2"></div>
-      <div className="moon"></div>
-      <div className="star star-1"></div>
-      <div className="star star-2"></div>
-      <div className="star star-3"></div>
-      <div className="star star-4"></div>
-      <div className="star star-5"></div>
-      <div className="star star-6"></div>
+      {/* Sky decorations - only show with default background */}
+      {!useCustomBackground && (
+        <>
+          <div className="cloud cloud-1"></div>
+          <div className="cloud cloud-2"></div>
+          <div className="moon"></div>
+          <div className="star star-1"></div>
+          <div className="star star-2"></div>
+          <div className="star star-3"></div>
+          <div className="star star-4"></div>
+          <div className="star star-5"></div>
+          <div className="star star-6"></div>
+        </>
+      )}
       
       {/* Task panel */}
       {showTasksPanel && (
@@ -161,6 +167,9 @@ const TasksPage = () => {
 
       {/* Pomodoro Panel */}
       {showPomodoroPanel && <PomodoroPanel />}
+
+      {/* Settings Panel */}
+      {showSettingsPanel && <SettingsPanel />}
 
       {/* Navigation Tabs */}
       <NavigationTabs />

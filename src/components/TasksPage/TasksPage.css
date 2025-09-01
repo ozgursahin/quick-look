@@ -6,6 +6,11 @@
   overflow: hidden;
 }
 
+/* When using custom background, remove the default gradient */
+.tasks-page.custom-background {
+  background: transparent;
+}
+
 /* Sky decorations */
 .cloud {
   position: absolute;

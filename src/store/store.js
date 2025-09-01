@@ -3,6 +3,7 @@ import createSagaMiddleware from 'redux-saga';
 import tasksReducer from './slices/tasksSlice';
 import notesReducer from './slices/notesSlice';
 import pomodoroReducer from './slices/pomodoroSlice';
+import settingsReducer from './slices/settingsSlice';
 import rootSaga from './sagas/rootSaga';
 import { sessionStorageMiddleware, sessionStorageSyncMiddleware } from './middleware/sessionStorageMiddleware';
 import { AppStateStorage } from '../utils/localStorage';
@@ -29,6 +30,7 @@ const store = configureStore({
     tasks: tasksReducer,
     notes: notesReducer,
     pomodoro: pomodoroReducer,
+    settings: settingsReducer,
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({

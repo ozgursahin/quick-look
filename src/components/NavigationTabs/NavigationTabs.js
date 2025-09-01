@@ -1,9 +1,10 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { IoList, IoDocument, IoTimer } from 'react-icons/io5';
+import { IoList, IoDocument, IoTimer, IoSettings } from 'react-icons/io5';
 import { closeTasksPanel } from '../../store/slices/tasksSlice';
 import { openNotesPanel, closeNotesPanel } from '../../store/slices/notesSlice';
 import { openPomodoroPanel, closePomodoroPanel } from '../../store/slices/pomodoroSlice';
+import { openSettingsPanel, closeSettingsPanel } from '../../store/slices/settingsSlice';
 import './NavigationTabs.css';
 
 const NavigationTabs = () => {
@@ -11,6 +12,7 @@ const NavigationTabs = () => {
   const { showTasksPanel } = useSelector(state => state.tasks);
   const { showNotesPanel } = useSelector(state => state.notes);
   const { showPomodoroPanel } = useSelector(state => state.pomodoro);
+  const { showSettingsPanel } = useSelector(state => state.settings);
 
   const handleTasksClick = () => {
     if (showTasksPanel) {
@@ -54,6 +56,14 @@ const NavigationTabs = () => {
     }
   };
 
+  const handleSettingsClick = () => {
+    if (showSettingsPanel) {
+      dispatch(closeSettingsPanel());
+    } else {
+      dispatch(openSettingsPanel());
+    }
+  };
+
   return (
     <div className="navigation-tabs">
       <div className="tab-container">
@@ -77,6 +87,13 @@ const NavigationTabs = () => {
         >
           <IoTimer size={18} />
           Pomodoro
+        </button>
+        <button 
+          className={`tab ${showSettingsPanel ? 'active' : ''}`}
+          onClick={handleSettingsClick}
+        >
+          <IoSettings size={18} />
+          Settings
         </button>
       </div>
     </div>

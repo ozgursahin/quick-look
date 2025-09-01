@@ -3,6 +3,7 @@ import { Provider } from 'react-redux';
 import store from './store/store';
 import TasksPage from './components/TasksPage/TasksPage';
 import SessionStorageProvider from './providers/SessionStorageProvider';
+import BackgroundManager from './components/BackgroundManager/BackgroundManager';
 import { usePomodoroTimer } from './hooks/usePomodoroTimer';
 import './App.css';
 
@@ -12,6 +13,7 @@ const AppContent = () => {
   
   return (
     <div className="App">
+      <BackgroundManager />
       <TasksPage />
     </div>
   );
